@@ -8,21 +8,24 @@ class User < ActiveRecord::Base
   has_many :interestedins
   has_many :meetingsfors
 
-  def getNextMatch(current_user) 
-    match = nil
-    match = Match.first
-    =>#<status: 0, recommender_id: current_user>
-    if match.nil? then
-        match = generate_matches(current_user)
-    else
-        match.status = "1"
-    end
-    return match
-  end
+  def self.fromFacebookUserObj(fbUserObj)
+    user = User.new do |u|
+      u.fb_id               = fbUserObj.identifier
 
-  def generate_matches(current_user)
-    return nil
+      if fbUserObj.respond_to?('profile') # if loading a friend vs the original person
+        u.name                = fbUserObj.profile.name
+        u.gender              = fbUserObj.profile.gender
+        u.first_name          = fbUserObj.profile.first_name
+        u.last_name           = fbUserObj.profile.last_name
+        u.relationship_status = fbUserObj.profile.relationship_status
+        u.birthday            = fbUserObj.profile.birthday
+        u.locale              = fbUserObj.profile.locale
+      else
+        u.name                = fbUserObj.name
+      end
+    end
+
+    user.save
+    return user
   end
 end
-
-
