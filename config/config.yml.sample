@@ -1,0 +1,8 @@
+common:
+    sample_value: true
+
+development:
+    sample_value: false
+
+production:
+    sample_value: false

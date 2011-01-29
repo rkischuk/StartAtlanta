@@ -38,5 +38,14 @@ module StartAtlanta
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+
+    require 'ostruct'
+
+    #load shared and environment-specific configurations from config/config.yml
+    conf = OpenStruct.new(YAML.load_file("#{Rails.root}/config/config.yml"))
+
+    env_config = conf.send(Rails.env)
+    conf.common.update(env_config) unless env_config.nil?
+    ::AppConfig = OpenStruct.new(conf.common)
   end
 end
