@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Fb:</b>
+  <%= @like.fb_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @like.name %>
+</p>
+
+<p>
+  <b>Picture:</b>
+  <%= @like.picture %>
+</p>
+
+<p>
+  <b>Link:</b>
+  <%= @like.link %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @like.category %>
+</p>
+
+<p>
+  <b>Website:</b>
+  <%= @like.website %>
+</p>
+
+<p>
+  <b>Likes:</b>
+  <%= @like.likes %>
+</p>
+
+
+<%= link_to 'Edit', edit_like_path(@like) %> |
+<%= link_to 'Back', likes_path %>

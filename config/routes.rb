@@ -8,6 +8,9 @@ StartAtlanta::Application.routes.draw do
   root :to => 'account#index'
   #get 'dashboard' => 'dashboard#show'
 
+  resources :likes
+  resources :matches
+  resources :users
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

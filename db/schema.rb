@@ -19,4 +19,44 @@ ActiveRecord::Schema.define(:version => 20110129173038) do
     t.datetime "updated_at"
   end
 
+ActiveRecord::Schema.define(:version => 20110129163902) do
+
+  create_table "likes", :force => true do |t|
+    t.string   "fb_id"
+    t.string   "name"
+    t.string   "picture"
+    t.string   "link"
+    t.string   "category"
+    t.string   "website"
+    t.integer  "likes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "matches", :force => true do |t|
+    t.integer  "match_id1"
+    t.integer  "match_id2"
+    t.integer  "recommender_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "fb_id"
+    t.string   "name"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "locale"
+    t.string   "birthdate"
+    t.string   "gender"
+    t.datetime "last_retrieved"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users_likes", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "like_id"
+  end
+
 end
