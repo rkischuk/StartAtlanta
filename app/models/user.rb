@@ -4,6 +4,10 @@ class User < ActiveRecord::Base
   has_many :recommendations, :class_name => "Match", :foreign_key => 'recommender_id'
   has_and_belongs_to_many :likes
 
+  has_one :location
+  has_many :interestedins
+  has_many :meetingsfors
+
   def getNextMatch(current_user) 
     match = nil
     match = Match.first
