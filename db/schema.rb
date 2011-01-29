@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110129173038) do
+ActiveRecord::Schema.define(:version => 20110129183455) do
 
   create_table "facebooks", :force => true do |t|
     t.string   "identifier",   :limit => 20
@@ -45,11 +45,19 @@ ActiveRecord::Schema.define(:version => 20110129173038) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "locale"
-    t.string   "birthdate"
+    t.string   "birthday"
     t.string   "gender"
     t.datetime "last_retrieved"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "link"
+    t.string   "relationship_status"
+    t.string   "bio"
+    t.string   "quotes"
+    t.string   "religion"
+    t.string   "political"
+    t.boolean  "fb_verified"
+    t.string   "updated_time"
   end
 
   create_table "users_likes", :id => false, :force => true do |t|
