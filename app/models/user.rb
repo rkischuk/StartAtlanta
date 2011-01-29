@@ -29,4 +29,12 @@ class User < ActiveRecord::Base
     user.save
     return user
   end
+
+  def next_match()
+    #generate match object from users friends
+    #try to do this only for friends who have retrieved data already
+
+    match = Match.new
+  end
+
 end
