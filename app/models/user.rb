@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
+  STATUS = {
+    :yes => 1,
+    :no => 2,
+    :skip => 3
+  }
+
   has_many :matches1, :class_name => "Match", :foreign_key => 'match_id1'
   has_many :matches2, :class_name => "Match", :foreign_key => 'match_id2'
   has_many :recommendations, :class_name => "Match", :foreign_key => 'recommender_id'
@@ -8,6 +14,8 @@ class User < ActiveRecord::Base
   has_one :location
   has_many :interestedins
   has_many :meetingsfors
+
+  validates_inclusion_of :status, => in => STATUS
 
   def self.fromFacebookUserObj(fbUserObj)
     user = User.new do |u|
