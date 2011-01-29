@@ -19,8 +19,6 @@ ActiveRecord::Schema.define(:version => 20110129173038) do
     t.datetime "updated_at"
   end
 
-ActiveRecord::Schema.define(:version => 20110129163902) do
-
   create_table "likes", :force => true do |t|
     t.string   "fb_id"
     t.string   "name"
