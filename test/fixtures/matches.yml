@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  match_id1: 1
+  match_id2: 1
+  recommender_id: 1
+
+two:
+  match_id1: 1
+  match_id2: 1
+  recommender_id: 1
