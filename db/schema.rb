@@ -10,11 +10,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110129183455) do
+ActiveRecord::Schema.define(:version => 20110129185819) do
 
   create_table "facebooks", :force => true do |t|
     t.string   "identifier",   :limit => 20
     t.string   "access_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "interestedins", :force => true do |t|
+    t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -31,10 +37,23 @@ ActiveRecord::Schema.define(:version => 20110129183455) do
     t.datetime "updated_at"
   end
 
+  create_table "locations", :force => true do |t|
+    t.string   "fb_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "matches", :force => true do |t|
     t.integer  "match_id1"
     t.integer  "match_id2"
     t.integer  "recommender_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "meetingfors", :force => true do |t|
+    t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -58,6 +77,7 @@ ActiveRecord::Schema.define(:version => 20110129183455) do
     t.string   "political"
     t.boolean  "fb_verified"
     t.string   "updated_time"
+    t.string   "highest_education"
   end
 
   create_table "users_likes", :id => false, :force => true do |t|
