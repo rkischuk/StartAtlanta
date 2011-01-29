@@ -1,4 +1,6 @@
 StartAtlanta::Application.routes.draw do
+  resources :likes
+
   resources :matches
 
   resources :users

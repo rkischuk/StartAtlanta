@@ -1,0 +1,35 @@
+<h1>Listing likes</h1>
+
+<table>
+  <tr>
+    <th>Fb</th>
+    <th>Name</th>
+    <th>Picture</th>
+    <th>Link</th>
+    <th>Category</th>
+    <th>Website</th>
+    <th>Likes</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @likes.each do |like| %>
+  <tr>
+    <td><%= like.fb_id %></td>
+    <td><%= like.name %></td>
+    <td><%= like.picture %></td>
+    <td><%= like.link %></td>
+    <td><%= like.category %></td>
+    <td><%= like.website %></td>
+    <td><%= like.likes %></td>
+    <td><%= link_to 'Show', like %></td>
+    <td><%= link_to 'Edit', edit_like_path(like) %></td>
+    <td><%= link_to 'Destroy', like, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Like', new_like_path %>
