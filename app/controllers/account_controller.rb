@@ -7,6 +7,7 @@ class AccountController < ApplicationController
 
   def show
     @posts = current_user.profile.home
+    @user = current_user
   end
 
 end
