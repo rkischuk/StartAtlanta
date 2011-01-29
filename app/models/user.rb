@@ -1,7 +1,10 @@
 class User < ActiveRecord::Base
+  RELATIONSHIP = {
+    :single => "not married"
+  }
 
-  has_many :matches1, :class_name => "Match", :foreign_key => 'match_id1'
-  has_many :matches2, :class_name => "Match", :foreign_key => 'match_id2'
+  has_many :matches1, :class_name => "Match", :foreign_key => 'person_a'
+  has_many :matches2, :class_name => "Match", :foreign_key => 'person_b'
   has_many :recommendations, :class_name => "Match", :foreign_key => 'recommender_id'
   has_many :skipped, :class_name => "Match", :foreign_key => 'skipped_user_id'
   has_and_belongs_to_many :likes, :join_table => "users_likes"
@@ -79,10 +82,53 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  def next_match( user_id )
-    #generate match object from users friends
-    #try to do this only for friends who have retrieved data already
-    match = Match.new
+  def next_match(person_id = nil)
+    #Generates the next match for the provided person
+    #or generates a completely new match set
+    #Silently ignores person_id if invalid
+
+    person_a person.nil? ? nil : friends.first(:person_id => person_id)
+
+    unless person_a
+      person_a = get_matchable_person
+    end
+
+    person_b = find_match_for_user(person_a)
+
+      person_b = find_match_for_user(person)
+
+    gender = 'male'
+    #if can't find a person_b, loop through with a new person_a, first male, then female
+    while person_b.nil?
+      if person_a.nil?
+        person_a = get_matchable_person(gender, skiplist)
+
+        #just exit if no more person_a to find
+        break if person_a.nil? && gender=='female'
+        gender = 'female' if person_a.nil?
+      end
+      unless person_a.nil?
+        person_b = find_match_for_user(person_a)
+        skiplist << person_a
+      end
+    end
+
+    unless person_a.nil?
+      if person_a.gender=='female'
+        person_a,person_b = person_b,person_a
+      end
+    end
+
+    Match.new(:person_a => person_a, :person_b => person_b)
   end
 
+  protected
+    def get_matchable_person(gender = nil)
+      # > 18
+      # 2) relationship_status = "not married"
+
+      #friends.where(
+      #friends.where("age > 18 and gender = ? and relationship_status = 'single'", gender)
+
+    end
 end

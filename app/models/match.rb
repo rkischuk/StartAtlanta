@@ -1,5 +1,6 @@
 class Match < ActiveRecord::Base
   STATUS = {
+    :notselected => 0,
     :yes => 1,
     :no => 2,
     :skip => 3
