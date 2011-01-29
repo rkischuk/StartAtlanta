@@ -1,4 +1,14 @@
 StartAtlanta::Application.routes.draw do
+  resource :facebook do
+    get :callback, :to => :create
+  end
+
+  resource :subscription
+
+  root :to => 'account#index'
+  #get 'dashboard' => 'dashboard#show'
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

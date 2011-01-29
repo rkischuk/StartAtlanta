@@ -1,14 +1,62 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>StartAtlanta</title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
-  <%= csrf_meta_tag %>
-</head>
-<body>
-
-<%= yield %>
-
-</body>
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head>
+    <title>FbGraphSample</title>
+    <meta property="fb:app_id" content="<!%= Facebook.config[:app_id] %>" />
+    <%= stylesheet_link_tag :all %>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+    <%= javascript_include_tag :all %>
+    <%= csrf_meta_tag %>
+    <!--[if IE]>
+    <script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <div class="container">
+      <header class="container">
+        <h1>FbGraph Sample</h1>
+      </header>
+      <div class="main clearfix">
+        <section>
+          <%= yield %>
+        </section>
+        <aside>
+          <%= render :partial => 'layouts/sidebar' %>
+        </aside>
+      </div>
+      <footer>
+        <nav>
+          <p class="copytight">&copy; 2010 <a href="http://github.com/nov">nov matake</a></p>
+        </nav>
+      </footer>
+    </div>
+    <script src="http://connect.facebook.net/en_US/all.js"></script>
+    <script>
+      FB.init({
+        appId: "<%= Facebook.config[:client_id] %>",
+        cookie: true,
+        xfbml: true
+      });
+    </script>
+    <script type="text/javascript">
+      $(function () {
+        <% if flash[:error] %>
+          $.gritter.add({
+            title: "<%= flash[:error][:title] %>",
+            text : "<%= flash[:error][:message] %>",
+            image: "<%= flash[:error][:image] %>",
+            time : 5000
+          });
+        <% elsif flash[:notice] %>
+          $.gritter.add({
+            title: "<%= flash[:notice][:title] %>",
+            text : "<%= flash[:notice][:message] %>",
+            image: "<%= flash[:notice][:image] %>",
+            time : 3000
+          });
+        <% end %>
+      });
+    </script>
+  </body>
 </html>
