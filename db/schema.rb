@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110129221007) do
+ActiveRecord::Schema.define(:version => 20110129201307) do
 
   create_table "facebooks", :force => true do |t|
     t.string   "identifier",   :limit => 20
@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(:version => 20110129221007) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "status"
-    t.integer  "skipped_user_id"
   end
 
   create_table "meetingfors", :force => true do |t|

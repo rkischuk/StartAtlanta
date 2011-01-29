@@ -4,6 +4,10 @@ class AccountController < ApplicationController
   def index
   end
 
+  def next_match
+    
+  end
+
   def show
 
      u = User.fromFacebookUserObj(current_user)
