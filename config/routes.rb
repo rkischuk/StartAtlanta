@@ -16,6 +16,7 @@ StartAtlanta::Application.routes.draw do
 
   match "account/", :to => 'account#index', :via => [:get, :post]
   match "account/show", :via => [:get, :post]
+  match "account/loadallfriends"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
