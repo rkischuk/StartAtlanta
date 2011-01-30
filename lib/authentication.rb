@@ -29,9 +29,14 @@ module Authentication
       redirect_to root_url and return false
     end
 
+    def require_admin
+      Rails.logger.info(session[:current_user_fb_id])
+    end
+
     def authenticate(user)
       raise Unauthorized unless user
       session[:current_user] = user.id
+      session[:current_user_fb_id] = user.identifier
     end
 
     def unauthenticate

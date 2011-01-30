@@ -40,6 +40,9 @@
   <%= @user.last_retrieved %>
 </p>
 
-
+<% @user.likes.each do |like| %>
+  <a href="/likes/show/<%= like.id %>"><%= like.name %></a><br />
+<% end %>
+<p />
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
