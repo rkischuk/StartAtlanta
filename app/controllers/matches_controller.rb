@@ -17,7 +17,7 @@ class MatchesController < ApplicationController
 
     if current_user
       target_user = params['user_id']
-      match = current_user.user.next_match( target_user.nil? ? target_user : nil )
+      match = current_user.user.next_match( target_user.nil? ? nil : target_user )
 
       if match.nil?
         render :json => {"error" => "No matches found"}
