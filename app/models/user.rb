@@ -102,12 +102,12 @@ class User < ActiveRecord::Base
     #But, returns nil if unable to generat a match
 
     person_a = person_id.nil? ? nil : friends.where("users.id = ?", person_id).first
-
     person_a = get_matchable_person if person_a.nil?
 
     return nil if person_a.nil?
 
-    opposite_gender = person_a=="male" ? "female" : "male"
+    opposite_gender = (person_a.gender =="male") ? "female" : "male"
+
     person_b = get_matchable_person(opposite_gender)
 
     return nil if person_b.nil?
