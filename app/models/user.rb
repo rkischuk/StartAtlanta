@@ -109,8 +109,8 @@ class User < ActiveRecord::Base
     return nil if person_b.nil?
 
     m = Match.new
-    m.status = Match::STATUS[:no]
-    m.recommender_id = id
+    m.status = Match::STATUS[:notselected]
+    m.recommender = self
     m.person_a = person_a
     m.person_b = person_b
     #
