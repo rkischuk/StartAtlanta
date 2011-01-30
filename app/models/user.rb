@@ -65,8 +65,8 @@ class User < ActiveRecord::Base
       self.birthday            = fbUserObj.birthday
       self.locale              = fbUserObj.locale
       self.link                = fbUserObj.link
-      self.bio                 = fbUserObj.bio
-      self.quotes              = fbUserObj.quotes
+      self.bio                 = fbUserObj.bio[0,254] rescue nil
+      self.quotes              = fbUserObj.quotes[0,254] rescue nil
       self.religion            = fbUserObj.religion
       self.political           = fbUserObj.political
       self.fb_verified         = fbUserObj.verified
