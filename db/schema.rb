@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(:version => 20110129232810) do
     t.integer  "user_id"
   end
 
+  create_table "friendships", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "friend_id"
+  end
+
   create_table "interestedins", :force => true do |t|
     t.string   "type"
     t.datetime "created_at"
