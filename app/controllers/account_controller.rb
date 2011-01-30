@@ -26,6 +26,7 @@ class AccountController < ApplicationController
 
     current_user.save
 
+    redirect_to :controller => 'matches', :action => 'index'
     ## Other stuff thats WIP:
     #      f = FbGraph::User.fetch(friend.identifier, :access_token => friend.access_token)
     #      r = FbGraph::User.fetch('12811925')
