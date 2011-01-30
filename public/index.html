@@ -57,11 +57,11 @@ body {
 
 <div id="logo">
     <br /><br />
-    <a id="theButton" href="http://www.facebook.com/apps/application.php?id=150263725027202" title="Let's Play"><img src="images/site_button.png" border="0" /></a>
+    <a id="theButton" href="http://www.facebook.com/apps/application.php?id=150263725027202" title="Let's Play"><img src="/images/site_button.png" border="0" /></a>
 </div>
 
 <div id="footer">
-	<img src="images/site_footer.png" />
+	<img src="/images/site_footer.png" />
 </div>
 
 <!-- Remote jQuery with local fallback; taken from HTML5 Boilerplate http://html5boilerplate.com -->
@@ -71,10 +71,10 @@ body {
 <script>
 $(document).ready(function() {
 	$('#theButton').hover(function() {
-		$(this).children('img:first').attr('src', 'images/site_button_over.png');
+		$(this).children('img:first').attr('src', '/images/site_button_over.png');
 	},
 	function() {
-		$(this).children('img:first').attr('src', 'images/site_button.png');
+		$(this).children('img:first').attr('src', '/images/site_button.png');
 	});
 });
 </script>
