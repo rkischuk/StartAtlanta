@@ -14,7 +14,7 @@ StartAtlanta::Application.routes.draw do
   resources :matches
   resources :users
 
-  match "account/", :to => 'account#show', :via => [:get, :post]
+  match "account/", :to => 'account#index', :via => [:get, :post]
   match "account/show", :via => [:get, :post]
 
   # The priority is based upon order of creation:
