@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110130070726) do
+ActiveRecord::Schema.define(:version => 20110130174629) do
 
   create_table "facebooks", :force => true do |t|
     t.string   "identifier",   :limit => 20
