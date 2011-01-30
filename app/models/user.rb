@@ -20,22 +20,28 @@ class User < ActiveRecord::Base
   has_many :interestedins
   has_many :meetingsfors
 
-  def self.fromFacebookUserObj(fbUserObj)
-    user = User.new do |u|
-      u.fb_id               = fbUserObj.identifier
+  validates_uniqueness_of :fb_id
 
-      if fbUserObj.respond_to?('profile') # if loading a friend vs the original person
-        u.name                = fbUserObj.profile.name
-        u.gender              = fbUserObj.profile.gender
-        u.first_name          = fbUserObj.profile.first_name
-        u.last_name           = fbUserObj.profile.last_name
-        u.relationship_status = fbUserObj.profile.relationship_status
-        u.birthday            = fbUserObj.profile.birthday
-        u.locale              = fbUserObj.profile.locale
-      else
-        u.name                = fbUserObj.name
-      end
+  def self.fromFacebookUserObj(fbUserObj, full_retrieval = nil)
+    user = User.find_by_fb_id(fbUserObj.identifier)
+    if user.nil?
+      user = User.new
+      user.fb_id               = fbUserObj.identifier
     end
+
+      if fbUserObj.respond_to?('profile') # think this iswhether this is the authenticated user or someone else
+        fbUserObj = fbUserObj.profile
+      end
+
+      user.name                = fbUserObj.name
+      user.gender              = fbUserObj.gender
+      user.first_name          = fbUserObj.first_name
+      user.last_name           = fbUserObj.last_name
+      user.relationship_status = fbUserObj.relationship_status
+      user.birthday            = fbUserObj.birthday
+      user.locale              = fbUserObj.locale
+
+      user.touch(:last_retrieved) if full_retrieval
 
     user.save
     

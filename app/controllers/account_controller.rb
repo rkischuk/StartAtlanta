@@ -6,7 +6,7 @@ class AccountController < ApplicationController
 
   def show
 
-     u = User.fromFacebookUserObj(current_user)
+     u = User.fromFacebookUserObj(current_user, true)
      logger.info "Populating likes"
      #u.populate_likes(current_user.profile.likes)
      u.populate_groups(current_user.profile.groups)
@@ -21,7 +21,7 @@ class AccountController < ApplicationController
         logger.info(ActiveSupport::JSON.encode(friend))
         f = User.find_by_fb_id(friend.identifier)
         if f.nil?
-          f = User.fromFacebookUserObj(friend)
+          f = User.fromFacebookUserObj(friend, false)
           f.populate_likes(friend.likes)
           f.populate_groups(friend.groups)
         end
