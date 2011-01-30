@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   has_many :friends, :through => :friendships, :source => :friend
   has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
   has_many :inverse_friends, :through => :inverse_friendships, :source => :user
+  has_many :newmatches, :through => :friendships, :source => :friend, :conditions => "gender = 'female'"
 
   has_one :location
   has_many :interestedins
@@ -44,7 +45,6 @@ class User < ActiveRecord::Base
       user.touch(:last_retrieved) if full_retrieval
 
     user.save
-    
     return user
   end
 
@@ -93,39 +93,25 @@ class User < ActiveRecord::Base
     #or generates a completely new match set
     #Silently ignores person_id if invalid
 
-    person_a person.nil? ? nil : friends.first(:person_id => person_id)
+    person_a = person_id.nil? ? nil : friends.first(:person_id => person_id)
+
+    return get_matchable_person
 
     unless person_a
       person_a = get_matchable_person
     end
 
-    person_b = find_match_for_user(person_a)
+    return "a" if person_a.nil?
 
-      person_b = find_match_for_user(person)
+    opposite_gender person_a=="male" ? "female" : "male"
+    person_b = get_matchable_person(person_a, opposite_gender)
 
-    gender = 'male'
-    #if can't find a person_b, loop through with a new person_a, first male, then female
-    while person_b.nil?
-      if person_a.nil?
-        person_a = get_matchable_person(gender, skiplist)
-
-        #just exit if no more person_a to find
-        break if person_a.nil? && gender=='female'
-        gender = 'female' if person_a.nil?
-      end
-      unless person_a.nil?
-        person_b = find_match_for_user(person_a)
-        skiplist << person_a
-      end
-    end
-
-    unless person_a.nil?
-      if person_a.gender=='female'
-        person_a,person_b = person_b,person_a
-      end
-    end
-
-    Match.new(:person_a => person_a, :person_b => person_b)
+    match = Match.new(:person_a => person_a,
+                      :person_b => person_b,
+                      :status => Match.STATUS[:notselected],
+                      :recommender_id => id)
+    #match.save
+    return "b"
   end
 
   protected
@@ -133,8 +119,16 @@ class User < ActiveRecord::Base
       # > 18
       # 2) relationship_status = "not married"
 
-      #friends.where(
-      #friends.where("age > 18 and gender = ? and relationship_status = 'single'", gender)
+      if gender.nil?
+        return friends.where("(gender = 'male' or gender = 'female')").limit(1).order("RANDOM()")
+      else
+        #return friends.where("relationship_status = ? and cleanBirthday > ? and gender = ?","not married", birthday, gender).limit(1).order("RANDOM()")
+      end
+
+    end
+
+    def youngest_birthdate()
+      return 18.years.ago;
 
     end
 end
