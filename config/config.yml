@@ -1,0 +1,10 @@
+common:
+    sample_value: true
+
+development:
+    application_id: 122349161170258
+    application_secret: b48d16e18d3baa7cdd5732eee6bae5d7
+
+production:
+    application_id: 150263725027202
+    application_secret: 04f39d1b7d7d8645fa3dfc40d21b30de
