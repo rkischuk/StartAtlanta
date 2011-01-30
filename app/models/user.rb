@@ -31,10 +31,9 @@ class User < ActiveRecord::Base
     return user
   end
 
-  def next_match()
+  def next_match( user_id )
     #generate match object from users friends
     #try to do this only for friends who have retrieved data already
-
     match = Match.new
   end
 

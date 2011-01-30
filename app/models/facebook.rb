@@ -1,5 +1,7 @@
 class Facebook < ActiveRecord::Base
 
+  belongs_to :user
+
   def profile
     @profile ||= FbGraph::User.me(self.access_token).fetch
   end

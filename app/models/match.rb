@@ -11,6 +11,5 @@ class Match < ActiveRecord::Base
   belongs_to :skipped_user, :class_name => "User", :primary_key => "skipped_user_id", :foreign_key => "user_id"
 
   validates_inclusion_of :status, :in => STATUS
-
 end
 
