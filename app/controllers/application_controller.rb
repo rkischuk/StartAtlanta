@@ -3,7 +3,8 @@ require 'authentication'
 class ApplicationController < ActionController::Base
   include Authentication
 
-  protect_from_forgery
+  #Commented out, because Facebook messes this up
+  #protect_from_forgery
 
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
 

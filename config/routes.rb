@@ -14,6 +14,9 @@ StartAtlanta::Application.routes.draw do
   resources :matches
   resources :users
 
+  match "account/", :to => 'account#show', :via => [:get, :post]
+  match "account/show", :via => [:get, :post]
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -69,5 +72,5 @@ StartAtlanta::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  match ':controller(/:action(/:id(.:format)))'
+  #match ':controller(/:action(/:id(.:format)))'
 end
