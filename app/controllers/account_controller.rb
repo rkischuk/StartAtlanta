@@ -44,4 +44,15 @@ class AccountController < ApplicationController
   def next_match
     render :json => {:user => current_user.user}
   end
+
+  def loadallfriends
+    @u = User.find_by_fb_id(current_user.profile.identifier)
+    @count = 0
+    @u.friends.where('"users".last_retrieved IS NULL').each do |f|
+      friendFb = FbGraph::User.fetch(f.fb_id, :access_token => current_user.access_token)
+      u = User.fromFacebookUserObj(friendFb, true)
+      @count += 1
+    end
+
+  end
 end
