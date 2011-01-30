@@ -3,7 +3,6 @@ class User < ActiveRecord::Base
     :single => "Single"
   }
 
-
   has_many :person_a_matches, :class_name => "Match", :foreign_key => 'person_a_id'
   has_many :person_b_matches, :class_name => "Match", :foreign_key => 'person_b_id'
   has_many :recommendations, :class_name => "Match", :foreign_key => 'recommender_id'
@@ -24,31 +23,65 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :fb_id
 
-
-  def self.fromFacebookUserObj(fbUserObj, full_retrieval = nil)
+  def self.fromFacebookUserObj(fbUserObj, is_full_fetch = false)
+    logger.info "fromFacebookUserObj"
+    #will not populate friends, groups, likes
+    #check first to see if there is an existing row in the database for this user
     user = User.find_by_fb_id(fbUserObj.identifier)
-    if user.nil?
-      user = User.new
-      user.fb_id               = fbUserObj.identifier
-    end
+    user = User.new if user.nil?
 
+    user.populate_from_fbUser(fbUserObj, is_full_fetch)
+    return user
+  end
+
+  def fetch_and_populate()
+      return false if fb_id.nil?
+
+      fbObj = FbGraph::User.fetch(fb_id, :access_token => current_user.access_token)
+      populate_from_fbUser(fbObj)
+  end
+
+  def fetch_and_populate_by_fb_id(new_fb_id)
+    return false if new_fb_id.nil?
+
+    self.fb_id = new_fb_id
+    fetch_and_populate
+  end
+
+  def populate_from_fbUser(fbUserObj, is_full_fetch = false)
+    logger.info "populate_from_fbUser"
+    #will not populate friends, groups, likes
+    #return boolean
       if fbUserObj.respond_to?('profile') # think this iswhether this is the authenticated user or someone else
         fbUserObj = fbUserObj.profile
       end
 
-      user.name                = fbUserObj.name
-      user.gender              = fbUserObj.gender
-      user.first_name          = fbUserObj.first_name
-      user.last_name           = fbUserObj.last_name
-      user.relationship_status = fbUserObj.relationship_status
-      user.birthday            = fbUserObj.birthday
-      user.locale              = fbUserObj.locale
+      self.fb_id               = fbUserObj.identifier
+      self.name                = fbUserObj.name
+      self.gender              = fbUserObj.gender
+      self.first_name          = fbUserObj.first_name
+      self.last_name           = fbUserObj.last_name
+      self.relationship_status = fbUserObj.relationship_status
+      self.birthday            = fbUserObj.birthday
+      self.locale              = fbUserObj.locale
+      self.link                = fbUserObj.link
+      self.bio                 = fbUserObj.bio
+      self.quotes              = fbUserObj.quotes
+      self.religion            = fbUserObj.religion
+      self.political           = fbUserObj.political
+      self.fb_verified         = fbUserObj.verified
+      self.updated_time        = fbUserObj.updated_time
+      self.email               = fbUserObj.email
+      self.highest_education   = get_highest_education_level(fbUserObj.education)
 
       unless fbUserObj.birthday.nil? || fbUserObj.birthday.year == 0
         user.clean_birthday = fbUserObj.birthday
       end
 
-      user.touch(:last_retrieved) if full_retrieval
+      self.touch(:last_retrieved) if is_full_fetch
+
+      self.save
+  end
 
     user.save
     return user
@@ -123,6 +156,10 @@ class User < ActiveRecord::Base
   end
 
   protected
+    def get_highest_education_level(education_array)
+      return ""
+    end
+
     def get_matchable_person(gender = nil)
       # > 18
       # 2) relationship_status = "not married"
