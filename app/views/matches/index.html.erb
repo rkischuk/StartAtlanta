@@ -365,6 +365,12 @@ $('#voteYes').hover(function() {
 	});
 
 $('#voteYes').click(function() {
+
+	if ($('#leftPerson').children().children('img:last').attr('id') == 'loader_a' || $('#rightPerson').children().children('img:last').attr('id') == 'loader_b') {
+		alert('You must load your friends first.');
+		return false;
+	}
+	
 	$(this).attr('src', '/images/yes-hit.png');
 
 	$('#matchBox').animate({marginTop: '0'}, 1000);
@@ -400,9 +406,12 @@ $('#voteYes').click(function() {
 			loadRight(rpContainerCount);
 			lpContainerCount++;
 			rpContainerCount++;
+			return true;
 		},
 		error: function(xhr, textStatus, errorThrown){
-        	alert("Error: " +textStatus)
+        	alert("Error: " +textStatus);
+        	return false;
+        	
         }
 	});
 });
@@ -415,6 +424,11 @@ $('#voteNo').hover(function() {
 	});
 
 $('#voteNo').click(function() {
+
+	if ($('#leftPerson').children().children('img:last').attr('id') == 'loader_a' || $('#rightPerson').children().children('img:last').attr('id') == 'loader_b') {
+		alert('You must load your friends first.');
+		return false;
+	}
 	$(this).attr('src', '/images/no-hit.png');
 	
 		$.ajax({
@@ -443,9 +457,11 @@ $('#voteNo').click(function() {
 			loadRight(rpContainerCount);
 			lpContainerCount++;
 			rpContainerCount++;
+			return true;
 		},
 		error: function(xhr, textStatus, errorThrown){
-        	alert("Error: " +textStatus)
+        	alert("Error: " +textStatus);
+        	return false;
         }
 	});
 });
@@ -476,9 +492,11 @@ function initialLoad() {
 			loadRight(rpContainerCount);
 			lpContainerCount++;
 			rpContainerCount++;
+			return true;
 		},
 		error: function(xhr, textStatus, errorThrown){
-			alert("Error: " +textStatus)
+			alert("Error: " +textStatus);
+			return false;
 		}
 	});
 }
@@ -489,6 +507,7 @@ function loadLeft(counter) {
 	$('#lpContainer'+counter).animate({height: '0'}, 1000, function() { $(this).remove(); $('#skipLeft').attr('src', '/images/skip-left.png'); });
 	$('#lpContainer'+(counter-1)).remove();
 	$('#leftName').text(leftName);		
+	return true;
 }
 
 function loadRight(counter) {
@@ -497,6 +516,7 @@ function loadRight(counter) {
 	$('#rpContainer'+counter).animate({height: '0'}, 1000, function() { $(this).remove(); $('#skipRight').attr('src', '/images/skip-right.png'); });
 	$('#rpContainer'+(counter-1)).remove();
 	$('#rightName').text(rightName);		
+	return true;
 }
 
 $(document).ready(function() {
