@@ -14,11 +14,12 @@ class AccountController < ApplicationController
      logger.info "Populating friends list"
      u.populate_friends(current_user.profile.friends)
      u.fetch_and_populate_friend_details(10, current_user.access_token)
+    else
+      current_user.user = u
     end
      #u.populate_likes(current_user.profile.likes)
      #u.populate_groups(current_user.profile.groups)
 
-     current_user.user = u
 
     @user = current_user
     @profile = current_user.profile.home
