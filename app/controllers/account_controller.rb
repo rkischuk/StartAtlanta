@@ -22,8 +22,8 @@ class AccountController < ApplicationController
         f = User.find_by_fb_id(friend.identifier)
         if f.nil?
           f = User.fromFacebookUserObj(friend, false)
-          f.populate_likes(friend.likes)
-          f.populate_groups(friend.groups)
+          #f.populate_likes(friend.likes)
+          #f.populate_groups(friend.groups)
         end
 
         u.friendships.build(:friend_id => f.id)

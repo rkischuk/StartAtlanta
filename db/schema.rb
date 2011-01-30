@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110129232810) do
+ActiveRecord::Schema.define(:version => 20110130070726) do
 
   create_table "facebooks", :force => true do |t|
     t.string   "identifier",   :limit => 20
@@ -51,8 +51,8 @@ ActiveRecord::Schema.define(:version => 20110129232810) do
   end
 
   create_table "matches", :force => true do |t|
-    t.integer  "person_a"
-    t.integer  "person_b"
+    t.integer  "person_a_id"
+    t.integer  "person_b_id"
     t.integer  "recommender_id"
     t.datetime "created_at"
     t.datetime "updated_at"

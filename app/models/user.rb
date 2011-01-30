@@ -1,10 +1,11 @@
 class User < ActiveRecord::Base
   RELATIONSHIP = {
-    :single => "not married"
+    :single => "Single"
   }
 
-  has_many :matches1, :class_name => "Match", :foreign_key => 'person_a'
-  has_many :matches2, :class_name => "Match", :foreign_key => 'person_b'
+
+  has_many :person_a_matches, :class_name => "Match", :foreign_key => 'person_a_id'
+  has_many :person_b_matches, :class_name => "Match", :foreign_key => 'person_b_id'
   has_many :recommendations, :class_name => "Match", :foreign_key => 'recommender_id'
   has_many :skipped, :class_name => "Match", :foreign_key => 'skipped_user_id'
   has_and_belongs_to_many :likes, :join_table => "users_likes"
@@ -22,6 +23,7 @@ class User < ActiveRecord::Base
   has_many :meetingsfors
 
   validates_uniqueness_of :fb_id
+
 
   def self.fromFacebookUserObj(fbUserObj, full_retrieval = nil)
     user = User.find_by_fb_id(fbUserObj.identifier)
@@ -89,29 +91,31 @@ class User < ActiveRecord::Base
   end
 
   def next_match(person_id = nil)
-    #Generates the next match for the provided person
+    #Generates the next match for the provided person 
     #or generates a completely new match set
+    #This match is saved!
     #Silently ignores person_id if invalid
+    #But, returns nil if unable to generat a match
 
-    person_a = person_id.nil? ? nil : friends.first(:person_id => person_id)
+    person_a = person_id.nil? ? nil : friends.where("users.id = ?", person_id).first
 
-    return get_matchable_person
+    person_a = get_matchable_person if person_a.nil?
 
-    unless person_a
-      person_a = get_matchable_person
-    end
+    return nil if person_a.nil?
 
-    return "a" if person_a.nil?
+    opposite_gender = person_a=="male" ? "female" : "male"
+    person_b = get_matchable_person(opposite_gender)
 
-    opposite_gender person_a=="male" ? "female" : "male"
-    person_b = get_matchable_person(person_a, opposite_gender)
+    return nil if person_b.nil?
 
-    match = Match.new(:person_a => person_a,
-                      :person_b => person_b,
-                      :status => Match.STATUS[:notselected],
-                      :recommender_id => id)
-    #match.save
-    return "b"
+    m = Match.new
+    m.status = Match::STATUS[:no]
+    m.recommender_id = id
+    m.person_a = person_a
+    m.person_b = person_b
+    #
+    Rails.logger.info "Generating match between #{person_a.name} and #{person_b.name}"
+    m.save and return m
   end
 
   protected
@@ -120,9 +124,9 @@ class User < ActiveRecord::Base
       # 2) relationship_status = "not married"
 
       if gender.nil?
-        return friends.where("(gender = 'male' or gender = 'female')").limit(1).order("RANDOM()")
+        return friends.where("relationship_status = 'Single' and (gender = 'male' or gender = 'female')").order("RANDOM()").first
       else
-        #return friends.where("relationship_status = ? and cleanBirthday > ? and gender = ?","not married", birthday, gender).limit(1).order("RANDOM()")
+        return friends.where("relationship_status = 'Single' and (gender = ?)", gender).order("RANDOM()").first
       end
 
     end
