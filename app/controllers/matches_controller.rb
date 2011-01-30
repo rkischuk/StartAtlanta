@@ -26,9 +26,8 @@ class MatchesController < ApplicationController
         unless target_user
           response << user_info_for(match.person_a)
         end
+        render :json => { "match_id" => match.id, "users" => response }
       end
-
-      render :json => { "match_id" => match.id, "users" => response }
     else
       render :json => {"error" => "User does not have an active session"}
     end
