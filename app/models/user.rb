@@ -6,6 +6,13 @@ class User < ActiveRecord::Base
   has_many :skipped, :class_name => "Match", :foreign_key => 'skipped_user_id'
   has_and_belongs_to_many :likes
 
+  # from: http://railscasts.com/episodes/163-self-referential-association
+
+  has_many :friendships
+  has_many :friends, :through => :friendships
+  has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
+  has_many :inverse_friends, :through => :inverse_friendships, :source => :user
+
   has_one :location
   has_many :interestedins
   has_many :meetingsfors

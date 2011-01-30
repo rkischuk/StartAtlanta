@@ -16,11 +16,14 @@ class AccountController < ApplicationController
 
      friends.each do |friend|
         logger.info(ActiveSupport::JSON.encode(friend))
-        User.fromFacebookUserObj(friend)
+        f = User.fromFacebookUserObj(friend)
+        u.friendships.build(:friend_id => f.id)
+        u.save
      end
 
     @user = current_user
     @profile = current_user.profile.home
+    @friendships = u.friendships
 
     current_user.save
 
