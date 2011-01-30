@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110130070726) do
+ActiveRecord::Schema.define(:version => 20110130174629) do
 
   create_table "facebooks", :force => true do |t|
     t.string   "identifier",   :limit => 20
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20110130070726) do
     t.string   "updated_time"
     t.string   "highest_education"
     t.date     "clean_birthday"
+    t.string   "email"
   end
 
   create_table "users_likes", :id => false, :force => true do |t|
