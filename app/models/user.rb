@@ -44,6 +44,10 @@ class User < ActiveRecord::Base
       user.birthday            = fbUserObj.birthday
       user.locale              = fbUserObj.locale
 
+      unless fbUserObj.birthday.nil? || fbUserObj.birthday.year == 0
+        user.clean_birthday = fbUserObj.birthday
+      end
+
       user.touch(:last_retrieved) if full_retrieval
 
     user.save

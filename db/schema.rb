@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(:version => 20110130070726) do
     t.boolean  "fb_verified"
     t.string   "updated_time"
     t.string   "highest_education"
+    t.date     "clean_birthday"
   end
 
   create_table "users_likes", :id => false, :force => true do |t|
