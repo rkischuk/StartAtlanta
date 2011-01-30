@@ -113,7 +113,6 @@ class User < ActiveRecord::Base
 
   def has_unretrieved_friends
     friends.where('"users".last_retrieved IS NULL').count > 0
->>>>>>> Dont load likes or groups. Only load friends once
   end
 
   def populate_groups(group_list)
