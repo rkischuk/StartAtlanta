@@ -7,14 +7,14 @@ StartAtlanta::Application.routes.draw do
 
   root :to => 'account#index'
   #get 'dashboard' => 'dashboard#show'
-  get 'me' => 'account#show'
+  get 'me' => 'matches#index'
 
 
   resources :likes
   resources :matches
   resources :users
 
-  match "account/", :to => 'account#index', :via => [:get, :post]
+  match "account/", :to => 'facebooks#new', :via => [:get, :post]
   match "account/show", :via => [:get, :post]
   match "account/loadallfriends"
 
