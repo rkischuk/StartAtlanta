@@ -10,8 +10,10 @@ class AccountController < ApplicationController
     u = User.find_by_fb_id(current_user.identifier)
     if u.nil?
      u = User.fromFacebookUserObj(current_user, true)
+     current_user.user = u
      logger.info "Populating friends list"
      u.populate_friends(current_user.profile.friends)
+     u.fetch_and_populate_friend_details(10, current_user.access_token)
     end
      #u.populate_likes(current_user.profile.likes)
      #u.populate_groups(current_user.profile.groups)

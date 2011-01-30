@@ -98,15 +98,17 @@ class User < ActiveRecord::Base
 
   end
 
-  def fetch_and_populate_friend_details(num = nil)
+  def fetch_and_populate_friend_details(num = nil, token = nil)
     if num.nil?
       friends_list = friends.where('"users".last_retrieved IS NULL')
     else
       friends_list = friends.where('"users".last_retrieved IS NULL').limit(num)
     end
 
+    token = current_user.access_token if token.nil?
+
     friends_list.each do |f|
-      friendFb = FbGraph::User.fetch(f.fb_id, :access_token => current_user.access_token)
+      friendFb = FbGraph::User.fetch(f.fb_id, :access_token => token)
       u = User.fromFacebookUserObj(friendFb, true)
     end
   end
