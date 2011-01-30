@@ -15,15 +15,19 @@ class MatchesController < ApplicationController
       end
     end
 
-    target_user = params['user_id']
-    match = current_user.user.next_match( target_user.nil? ? target_user : nil )
+    if current_user
+      target_user = params['user_id']
+      match = current_user.user.next_match( target_user.nil? ? target_user : nil )
 
-    response = [user_info_for(match.person_b)]
-    unless target_user
-      response << user_info_for(match.person_a)
+      response = [user_info_for(match.person_b)]
+      unless target_user
+        response << user_info_for(match.person_a)
+      end
+
+      render :json => { "match_id" => match.id, "users" => response }
+    else
+      render :json => {"error" => "User does not have an active session"}
     end
-
-    render :json => { "match_id" => match.id, "users" => response }
   end
   
   private
