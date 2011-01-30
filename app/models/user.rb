@@ -195,9 +195,9 @@ class User < ActiveRecord::Base
       # 2) relationship_status = "not married"
 
       if gender.nil?
-        return friends.where("(relationship_status = 'Single' or relationship_status IS NULL) and (gender = 'male' or gender = 'female')").order("RANDOM()").first
+        return friends.where("last_retrieved IS NOT NULL and (relationship_status = 'Single' or relationship_status IS NULL) and (gender = 'male' or gender = 'female')").order("RANDOM()").first
       else
-        return friends.where("(relationship_status = 'Single' or relationship_status IS NULL) and (gender = ?)", gender).order("RANDOM()").first
+        return friends.where("last_retrieved IS NOT NULL and (relationship_status = 'Single' or relationship_status IS NULL) and (gender = ?)", gender).order("RANDOM()").first
       end
 
     end
