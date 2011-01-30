@@ -313,9 +313,9 @@ $('#skipLeft').click(function() {
 		success: function(data)
 		{  
 			matchId = data.match_id;
-			leftId = data.users.id;
-			leftFbId = data.users.fb_id;
-			leftName = data.users.name;
+			leftId = data.users[0].id;
+			leftFbId = data.users[0].fb_id;
+			leftName = data.users[0].name;
 
 			loadLeft(lpContainerCount);
 	
@@ -341,9 +341,9 @@ $('#skipRight').click(function() {
 		success: function(data)
 		{  
 			matchId = data.matchId;
-			rightId = data.users.id;
-			rightFbId = data.users.fb_id;
-			rightName = data.users.name;
+			rightId = data.users[0].id;
+			rightFbId = data.users[0].fb_id;
+			rightName = data.users[0].name;
 
 			loadRight(rpContainerCount);
 			
