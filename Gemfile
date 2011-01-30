@@ -1,4 +1,5 @@
 source "http://rubygems.org"
+gem 'heroku'
 gem 'httparty'
 gem 'fb_graph'
 gem 'rails', '3.0.3'
