@@ -21,7 +21,9 @@ class ApplicationController < ActionController::Base
   private
   
   def delayed_load_data
-    current_user.user.fetch_and_populate_friend_details(5, current_user.access_token)
+    unless current_user.nil? || current_user.user.nil?
+      current_user.user.fetch_and_populate_friend_details(5, current_user.access_token)
+    end
   end
 
 end
