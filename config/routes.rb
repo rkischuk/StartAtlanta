@@ -7,7 +7,7 @@ StartAtlanta::Application.routes.draw do
 
   root :to => 'account#index'
   #get 'dashboard' => 'dashboard#show'
-  get 'me' => 'matches#index'
+  get 'me' => 'account#show'
 
 
   resources :likes

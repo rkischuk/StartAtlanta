@@ -27,7 +27,7 @@ module Authentication
       Rails.logger.info "Checking auth"
       authenticate Facebook.find_by_id(session[:current_user])
     rescue Unauthorized => e
-      Rails.logger.info "USer is not authenticated"
+      Rails.logger.info "User is not authenticated"
       redirect_to root_url and return false
     end
 
