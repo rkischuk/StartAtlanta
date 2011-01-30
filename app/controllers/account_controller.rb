@@ -5,34 +5,22 @@ class AccountController < ApplicationController
   end
 
   def show
+    logger.info "Beginning of show"
 
+    u = User.find_by_fb_id(current_user.identifier)
+    if u.nil?
      u = User.fromFacebookUserObj(current_user, true)
-     logger.info "Populating likes"
+     logger.info "Populating friends list"
+     u.populate_friends(current_user.profile.friends)
+    end
      #u.populate_likes(current_user.profile.likes)
-     u.populate_groups(current_user.profile.groups)
+     #u.populate_groups(current_user.profile.groups)
 
      current_user.user = u
-     friends = current_user.profile.friends
 
-     # Takes too long to do entire list
-     #friends = friends.slice(0..2)
-
-     friends.each do |friend|
-        logger.info(ActiveSupport::JSON.encode(friend))
-        f = User.find_by_fb_id(friend.identifier)
-        if f.nil?
-          f = User.fromFacebookUserObj(friend, false)
-          #f.populate_likes(friend.likes)
-          #f.populate_groups(friend.groups)
-        end
-
-        u.friendships.build(:friend_id => f.id)
-        u.save
-     end
 
     @user = current_user
     @profile = current_user.profile.home
-    @friendships = u.friendships
 
     current_user.save
 

@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
       self.highest_education   = get_highest_education_level(fbUserObj.education)
 
       unless fbUserObj.birthday.nil? || fbUserObj.birthday.year == 0
-        user.clean_birthday = fbUserObj.birthday
+        self.clean_birthday = fbUserObj.birthday
       end
 
       self.touch(:last_retrieved) if is_full_fetch
@@ -83,8 +83,37 @@ class User < ActiveRecord::Base
       self.save
   end
 
-    user.save
-    return user
+  def populate_friends(friends_list)
+    #friends_list is an array of friends from fbGraph
+    #populates database with list of friends
+    #does not retrieved detailed friend information
+    friends_list.each do |friend_object|
+      logger.info(ActiveSupport::JSON.encode(friend_object))
+      f = User.find_by_fb_id(friend_object.identifier)
+      f = User.fromFacebookUserObj(friend_object, false) if f.nil?
+
+      friendships.build(:friend_id => f.id)
+      self.save
+    end
+
+  end
+
+  def fetch_and_populate_friend_details(num = nil)
+    if num.nil?
+      friends_list = friends.where('"users".last_retrieved IS NULL')
+    else
+      friends_list = friends.where('"users".last_retrieved IS NULL').limit(num)
+    end
+
+    friends_list.each do |f|
+      friendFb = FbGraph::User.fetch(f.fb_id, :access_token => current_user.access_token)
+      u = User.fromFacebookUserObj(friendFb, true)
+    end
+  end
+
+  def has_unretrieved_friends
+    friends.where('"users".last_retrieved IS NULL').count > 0
+>>>>>>> Dont load likes or groups. Only load friends once
   end
 
   def populate_groups(group_list)
