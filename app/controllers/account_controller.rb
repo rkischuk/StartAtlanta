@@ -14,11 +14,14 @@ class AccountController < ApplicationController
      friends = friends.slice(0..20)
 
      friends.each do |friend|
-        User.fromFacebookUserObj(friend)
+        f = User.fromFacebookUserObj(friend)
+        u.friendships.build(:friend_id => f.id)
+        u.save
      end
 
     @user = current_user
     @profile = current_user.profile.home
+    @friendships = u.friendships
 
     ## Other stuff thats WIP:
     #      f = FbGraph::User.fetch(friend.identifier, :access_token => friend.access_token)
