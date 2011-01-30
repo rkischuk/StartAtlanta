@@ -2,10 +2,13 @@ development: &defaults
   app_id: 122349161170258
   client_id: 463d59d5bd48ea82fa22627092140b64
   client_secret: b48d16e18d3baa7cdd5732eee6bae5d7
-  perms: read_stream,publish_stream,offline_access,manage_pages,user_checkins,friends_checkins,user_photos,read_insights,user_interests,user_hometown,user_groups,friends_groups,user_events,user_education_history,user_birthday,user_activities,publish_checkins,friends_activities,friends_birthday,friends_likes,user_about_me,friends_about_me,friends_education_history,friends_birthday,friends_location
+  perms: user_interests,user_hometown,user_groups,friends_groups,user_events,user_education_history,user_birthday,user_activities,friends_activities,friends_birthday,user_likes,friends_likes,user_about_me,friends_about_me,friends_education_history,friends_birthday,friends_location,user_relationships,friends_relationships
 
 test:
   <<: *defaults
 
 production:
-  <<: *defaults
+  app_id: 122349161170258
+  client_id: aa5f6278677b856c359e75acca33bb05
+  client_secret: 04f39d1b7d7d8645fa3dfc40d21b30de
+  perms: user_interests,user_hometown,user_groups,friends_groups,user_events,user_education_history,user_birthday,user_activities,friends_activities,friends_birthday,user_likes,friends_likes,user_about_me,friends_about_me,friends_education_history,friends_birthday,friends_location,user_relationships,friends_relationships
