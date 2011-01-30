@@ -1,18 +1,524 @@
-<h1>Listing matches</h1>
+<!doctype html><!-- simplified doctype works for all previous versions of HTML as well -->
 
-<table>
-  <tr>
-    <th>Match id1</th>
-    <th>Match id2</th>
-    <th>Recommender</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<!-- Paul Irish's technique for targeting IE, modified to only target IE6, applied to the html element instead of body -->
+<!--[if lt IE 7 ]><html lang="en" class="no-js ie6"><![endif]-->
+<!--[if (gt IE 6)|!(IE)]><!--><html lang="en" class="no-js"><!--<![endif]-->
 
-  Welcome to the match page!
-</table>
+<head>
+	<!-- simplified character encoding -->
+	<meta charset="utf-8">
 
-<br />
+	<title>Connect Me</title>
+	<meta name="description" content="Connect your friends over Facebook">
+	<meta name="author" content="">
 
-<%= link_to 'New Match', new_match_path %>
+	<!-- Delete these two icon references once you've placed them in the root directory with these file names -->
+	<!-- favicon 16x16 -->
+	<link rel="shortcut icon" href="/favicon.ico">
+	<!-- apple touch icon 57x57 -->
+	<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+	<!-- Main style sheet. Change version number in query string to force styles refresh -->
+	<!-- Link element no longer needs type attribute -->
+	<link rel="stylesheet" href="css/screen.css?v=1.0">
+
+
+	<!-- Remove the script reference below if you're using Modernizr -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<style>
+    <!--
+    
+    /********************
+    ** Layout ***********
+    ********************/
+    body {
+        padding: 0;
+        margin: 0;
+        width: 720px;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 22px;
+    }
+    
+    #hd1 {
+        padding-top:20px;
+        width: 648px;
+    }
+    
+    #logo {
+        margin: 0 auto;
+        width: 532px;
+        height: 146px;
+    }
+    
+    #logoText {
+        z-index: 999999;
+        position: relative;
+        left: 380px;
+        top: 130px;
+        color: #64bbe9;	
+    }
+	
+	#matchBox {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 45px;
+		width: 720px;
+		margin-top: -75px;
+		background: #D4D4D4;
+		color: #06ac51;
+		font-size: 18px;
+		text-align: center;
+		padding-top: 20px;
+		padding: 20px 10px 10px 10px;
+	}
+    /********************
+    ** End of Layout ****
+    ********************/
+    
+    /********************
+    ** Profile **********
+    ********************/
+    #pictureBox {
+        position: absolute;
+        top: 260px;
+        left: 0;
+        height: 220px;
+        width: 720px;
+        overflow: hidden;
+        background: url('/images/middle.png') no-repeat;
+        z-index: 9999995;
+    }
+    
+    #nameBox {
+        position: absolute;
+        top: 525px;
+    }
+    
+    .personImage {
+        height: 218px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    #leftPerson {
+        position: absolute;
+        left: 65px;
+        top: 261px;
+        max-width: 180px;
+        height: 218px;
+        z-index: 10000;
+        overflow: hidden;
+    }
+    
+    #rightPerson {
+        position: absolute;
+        left: 460px;
+        top: 261px;
+        max-width: 180px;
+        height: 218px;
+        z-index: 100001;
+        overflow: hidden;
+    }
+    
+    #rpContainer {
+        height: 436px;
+    }
+    
+    .pContainer {
+        width: 180px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    /********************
+    ** End of Profile ***
+    ********************/
+    
+    /********************
+    ** Buttons **********
+    ********************/
+    #buttonBox {
+        position: absolute;
+        top: 440px;
+        left: 270px;
+        width: 180px;
+        z-index: 9999998;
+    }
+    
+    #skipLeft {
+        position: absolute;
+        left: 20px;
+        top: 280px;
+        width:30px;
+        height: 97px;
+        z-index: 9999996;
+    }
+    
+    #skipRight {
+        position: absolute;
+        left: 660px;
+        top: 360px;
+        width: 30px;
+        height: 97px;
+        z-index: 9999997;
+    }
+    
+    #leftName {
+        position: relative;
+        left: 65px;
+        top: -40px;
+        width: 180px;
+        text-align: center;
+        color: #06ac51;
+        z-index: 30;
+    }
+    
+    #rightName {
+        position: relative;
+        left: 460px;
+        top: -66px;
+        width: 180px;
+        text-align: center;
+        color: #06ac51;
+        z-index: 35;
+    }
+    /********************
+    ** End of Buttons ***
+    ********************/
+    
+    /********************
+    ** Footer ***********
+    ********************/
+    #f1 {
+        position: relative;
+        top: 100px;
+    }
+    /********************
+    ** End of Footer ****
+    ********************/
+    
+    -->
+    </style>
+</head>
+
+<body class="home">
+<!-- <div id="fb_root"></div>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script>
+window.fbAsyncInit = function() {
+  FB.init({
+	appId: "150263725027202", //"<%= Facebook.config[:client_id] %>",
+	cookie: true,
+	xfbml: true
+  });
+}
+</script>-->
+
+	<header id="hd1">
+		<!-- "hgroup" is used to make two headings into one, to prevent a new document node from forming -->
+		<hgroup>
+	        <div id="logo"><span id="logoText">your friends need you!</span> <img src="/images/logo.png" class="logo" alt="Connect Me" /></div>
+		</hgroup>
+	</header><!-- #hd1 -->
+
+	<div id="matchBox">
+	    <div id="matchedPictures" style="float: left; width: 100px;"><img id="matchedLeft" src="" height="40" /> <img id="matchedRight" src="" height="40" /></div>
+    	<div id="matchText">Congratulations! You've made a match! Would you like to invite your friends below to join ConnectMe? <a href="#" id="invite">Yep!</a></div>
+    </div>
+    
+    <div id="leftPerson">
+        <div class="pContainer" id="lpContainer0">
+            <img class="personImage" id="personAID" src="/images/loading_m.png" />
+        </div>
+    </div>
+    <div id="rightPerson">
+        <div class="pContainer" id="rpContainer0">
+            <img class="personImage" id="personBID" src="/images/loading_f.png" />
+        </div>
+    </div>
+
+    <div>
+        <img id="skipLeft" src="/images/skip-left.png" />
+    </div>
+    <div>
+        <img id="skipRight" src="/images/skip-right.png" />
+    </div>                
+
+	<div id="main">
+
+        <div id="pictureBox">
+        </div>
+
+        <div id="buttonBox">
+            <div><img id="voteYes" src="/images/yes.png" /><span style="position: relative; left: 20px;"><img id="voteNo" src="/images/no.png" /></span></div>
+        </div>
+
+        <div id="nameBox">
+            <div id="leftName"></div>
+            <div id="rightName"></div>
+        </div>
+
+	</div><!-- #main -->
+
+	<footer id="f1">
+	<p><!-- copyright © 2011 --></p>
+	</footer><!-- #f1 -->
+</div>
+
+<!-- Remote jQuery with local fallback; taken from HTML5 Boilerplate http://html5boilerplate.com -->
+<!-- jQuery version might not be the latest; check jquery.com -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src="js/jquery-1.4.4.min.js"%3E%3C/script%3E'))</script>
+
+<!-- Below is your script file, which has a basic JavaScript design pattern that you can optionally use -->
+<!-- Keep this and plugin scripts at the bottom for faster page load; combining and minifying scripts is recommended -->
+<script src="js/general.js"></script>
+
+<!-- asynchronous analytics code by Mathias Bynens; change UA-XXXXX-X to your own code; http://mathiasbynens.be/notes/async-analytics-snippet -->
+<!-- this can also be placed in the <head> if you want page views to be tracked quicker -->
+<script>
+var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
+(function(d, t) {
+	var g = d.createElement(t),
+		s = d.getElementsByTagName(t)[0];
+	g.async = true;
+	g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	s.parentNode.insertBefore(g, s);
+})(document, 'script');
+</script>
+<script>
+$('#invite').click(function(event) {
+	event.preventDefault();
+	FB.ui({method: 'apprequests', message: 'ConnectMe asked me who you\'d like to date. I found the perfect person.', title: 'ConnectMe is ready to connect you!', filters: [{name: 'Match', user_ids: [leftFbId, rightFbId]}]});
+});
+
+$(document).click(function(e) {
+	if ($('#matchBox').css('marginTop') == '0px') {
+		$('#matchBox').animate({marginTop: '-75px'}, 1000);
+	}
+});
+
+$('#skipLeft').click(function() {
+	$(this).attr('src', '/images/skip-left-hit.png');
+
+	id = $('#leftPerson').children().children('img:last').attr('id');
+	$.ajax({  
+
+		type: "POST",  
+		data: "previous_match_id="+matchId+"&previous_match_response=skip&skipped_user_id="+leftId+"&user_id="+rightId,
+		url: domain,
+		dataType: "json",
+		success: function(data)
+		{  
+			matchId = data.match_id;
+			leftId = data.users.id;
+			leftFbId = data.users.fb_id;
+			leftName = data.users.name;
+
+			loadLeft(lpContainerCount);
+	
+			lpContainerCount++;
+		},
+		error: function(xhr, textStatus, errorThrown){
+        	alert("Error: " +textStatus)
+        }
+	});
+
+});
+
+$('#skipRight').click(function() {
+	$(this).attr('src', '/images/skip-right-hit.png');
+	
+	id = $('#rightPerson').children().children('img:last').attr('id');
+
+	$.ajax({  
+		type: "POST",  
+		data: "previous_match_id="+matchId+"&previous_match_response=skip&skipped_user_id="+rightId+"&user_id="+leftId,
+		url: domain,
+		dataType: "json",
+		success: function(data)
+		{  
+			matchId = data.matchId;
+			rightId = data.users.id;
+			rightFbId = data.users.fb_id;
+			rightName = data.users.name;
+
+			loadRight(rpContainerCount);
+			
+			rpContainerCount++;
+		},
+		error: function(xhr, textStatus, errorThrown){
+        	alert("Error: " +textStatus)
+        }
+	});
+	
+
+});
+
+$('#voteYes').hover(function() {
+	$(this).attr('src', '/images/yes-over.png');
+	},
+	function() {
+		$(this).attr('src', '/images/yes.png');
+	});
+
+$('#voteYes').click(function() {
+	$(this).attr('src', '/images/yes-hit.png');
+
+	$('#matchBox').animate({marginTop: '0'}, 1000);
+	
+	oldLeftFbId = leftFbId;
+	$('#matchedLeft').attr('src', imgStart + oldLeftFbId + imgEnd);
+	oldRightFbId = rightFbId;
+	$('#matchedRight').attr('src', imgStart + oldRightFbId + imgEnd);
+
+		$.ajax({
+		type: "POST",  
+		data: "previous_match_id="+matchId+"&previous_match_response=yes",
+		url: domain,
+		dataType: 'json',
+		success: function(data)  
+		{
+			matchId = data.match_id;
+			uCount = 0;
+			$.each(data.users, function() {
+				if (uCount == 0) {
+					leftId = this.id;
+					leftName = this.name;
+					leftFbId = this.fb_id;
+				} else {
+					rightId = this.id;
+					rightName = this.name;
+					rightFbId = this.fb_id;					
+				}
+				uCount++;
+			});
+			
+			loadLeft(lpContainerCount);
+			loadRight(rpContainerCount);
+			lpContainerCount++;
+			rpContainerCount++;
+		},
+		error: function(xhr, textStatus, errorThrown){
+        	alert("Error: " +textStatus)
+        }
+	});
+});
+
+$('#voteNo').hover(function() {
+	$(this).attr('src', '/images/no-over.png');
+	},
+	function() {
+		$(this).attr('src', '/images/no.png');
+	});
+
+$('#voteNo').click(function() {
+	$(this).attr('src', '/images/no-hit.png');
+	
+		$.ajax({
+		type: "POST",  
+		data: "previous_match_id="+matchId+"&previous_match_response=no",
+		url: domain,
+		dataType: 'json',
+		success: function(data)  
+		{
+			matchId = data.match_id;
+			uCount = 0;
+			$.each(data.users, function() {
+				if (uCount == 0) {
+					leftId = this.id;
+					leftName = this.name;
+					leftFbId = this.fb_id;
+				} else {
+					rightId = this.id;
+					rightName = this.name;
+					rightFbId = this.fb_id;					
+				}
+				uCount++;
+			});
+			
+			loadLeft(lpContainerCount);
+			loadRight(rpContainerCount);
+			lpContainerCount++;
+			rpContainerCount++;
+		},
+		error: function(xhr, textStatus, errorThrown){
+        	alert("Error: " +textStatus)
+        }
+	});
+});
+
+function initialLoad() {
+	$.ajax({
+		type: "POST",
+		url: domain,
+		dataType: 'json',
+		success: function(data)  
+		{
+			matchId = data.match_id;
+			uCount = 0;
+			$.each(data.users, function() {
+				if (uCount == 0) {
+					leftId = this.id;
+					leftName = this.name;
+					leftFbId = this.fb_id;
+				} else {
+					rightId = this.id;
+					rightName = this.name;
+					rightFbId = this.fb_id;					
+				}
+				uCount++;
+			});
+			
+			loadLeft(lpContainerCount);
+			loadRight(rpContainerCount);
+			lpContainerCount++;
+			rpContainerCount++;
+		},
+		error: function(xhr, textStatus, errorThrown){
+			alert("Error: " +textStatus)
+		}
+	});
+}
+
+function loadLeft(counter) {
+	img = imgStart + leftFbId + imgEnd;
+	$('#leftPerson').append('<div class="pContainer" id="lpContainer'+(counter+1)+'"><img class="personImage" id="'+leftId+'" src="'+img+'" /></div>');
+	$('#lpContainer'+counter).animate({height: '0'}, 1000, function() { $(this).remove(); $('#skipLeft').attr('src', '/images/skip-left.png'); });
+	$('#lpContainer'+(counter-1)).remove();
+	$('#leftName').text(leftName);		
+}
+
+function loadRight(counter) {
+	img = imgStart + rightFbId + imgEnd;
+	$('#rightPerson').append('<div class="pContainer" id="rpContainer'+(counter+1)+'"><img class="personImage" id="'+rightId+'" src="'+img+'" /></div>');
+	$('#rpContainer'+counter).animate({height: '0'}, 1000, function() { $(this).remove(); $('#skipRight').attr('src', '/images/skip-right.png'); });
+	$('#rpContainer'+(counter-1)).remove();
+	$('#rightName').text(rightName);		
+}
+
+$(document).ready(function() {
+	lpContainerCount = 0;
+	rpContainerCount = 0;
+	imgStart = 'https://graph.facebook.com/';
+	imgEnd = '/picture?type=normal';
+	leftId = '';
+	leftFbId = '';
+	leftName = '';
+	rightId = '';
+	rightFbId = '';
+	rightName = '';
+	matchId = '';
+	oldLeftFbId = '';
+	oldRightFbId = '';
+	domain = 'http://gentle-day-115.heroku.com/matches/show';
+    initialLoad();
+});
+
+
+
+</script>
+</body>
+</html>
