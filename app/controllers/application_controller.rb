@@ -21,9 +21,9 @@ class ApplicationController < ActionController::Base
   private
   
   def delayed_load_data
-    unless current_user.nil? || current_user.user.nil?
-      current_user.user.fetch_and_populate_friend_details(5, current_user.access_token)
-    end
+    return if current_user.nil?
+    u = current_user.user.nil? ? User.find_by_fb_id(current_user.identifier) : current_user.user
+    u.fetch_and_populate_friend_details(5, current_user.access_token) unless u.nil?
   end
 
 end
