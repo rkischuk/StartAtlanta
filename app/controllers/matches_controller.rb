@@ -33,6 +33,10 @@ class MatchesController < ApplicationController
     end
   end
   
+  def view
+    
+  end
+  
   private
   
   def user_info_for(user)
