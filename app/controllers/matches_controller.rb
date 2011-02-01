@@ -20,7 +20,7 @@ class MatchesController < ApplicationController
       match = current_user.user.next_match( target_user.nil? ? nil : target_user )
 
       if match.nil?
-        render :json => {"error" => "No matches found"}
+        render :json => {"error" => "NO_MATCHES"}
       else
         response = [user_info_for(match.person_b)]
         unless target_user

@@ -1,0 +1,34 @@
+
+
+
+
+<div id="fb-root"></div>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<fb:serverFbml style="width: 755px;">  
+     <script type="text/fbml">
+        <fb:fbml>
+            <fb:request-form
+                action="http://git.menue.com:10005"
+                method="POST"
+                invite="true"
+                type="XFBML"
+                content="This is a test invitation from XFBML test app">
+
+                <fb:multi-friend-selector
+                    showborder="false"
+                    actiontext="Invite your friends to use Facebook." />
+             </fb:request-form>
+         </fb:fbml>
+    </script>
+</fb:serverFbml>
+
+<script>
+  FB.init({
+    appId  : '122349161170258',
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+  
+
+</script>

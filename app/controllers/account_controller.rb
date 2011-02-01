@@ -1,8 +1,5 @@
 class AccountController < ApplicationController
-  before_filter :require_authentication, :except => :index
-
-  def index
-  end
+  before_filter :require_authentication#, :except => :index
 
   def show
     logger.info "Beginning of show"
