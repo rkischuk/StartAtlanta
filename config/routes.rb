@@ -1,14 +1,13 @@
 StartAtlanta::Application.routes.draw do
   resource :facebook do
     get :callback, :to => :create
-    post :callback, :to => :create,
+    post :callback, :to => :create
   end
 
   resource :subscription
 
   root :to => 'account#show'
 
-  #get 'dashboard' => 'dashboard#show'
   get 'me' => 'account#show'
 
   match "matches/view"
@@ -18,7 +17,6 @@ StartAtlanta::Application.routes.draw do
   resources :matches
   resources :users
 
-  #match "account/", :to => 'facebooks#new', :via => [:get, :post]
   match "account/", :to => 'account#show', :via => [:get, :post]
   match "account/show", :via => [:get, :post]
   match "account/loadallfriends"
