@@ -10,7 +10,7 @@ test:
 
 production:
   app_id: 150263725027202
-  app_url: http://apps.facebook.com/connectme/
+  app_url: http://apps.facebook.com/connxme/
   client_id: aa5f6278677b856c359e75acca33bb05
   client_secret: 04f39d1b7d7d8645fa3dfc40d21b30de
   perms: user_interests,offline_access,user_hometown,user_groups,friends_groups,user_events,user_education_history,user_birthday,user_activities,friends_activities,friends_birthday,user_likes,friends_likes,user_about_me,friends_about_me,friends_education_history,friends_birthday,friends_location,user_relationships,friends_relationships
