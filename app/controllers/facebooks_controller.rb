@@ -13,7 +13,7 @@ class FacebooksController < ApplicationController
   def new
     #logger.info "NEW"
     @auth_url = Facebook.auth.client.web_server.authorize_url(
-        :redirect_uri => Facebook.config[:app_url] << "facebook/callback",
+        :redirect_uri => Facebook.config[:app_url] + "facebook/callback",
         :scope => Facebook.config[:perms]
       )
   end
@@ -23,7 +23,7 @@ class FacebooksController < ApplicationController
     #logger.info "CREATE"
     access_token = Facebook.auth.client.web_server.get_access_token(
       params[:code],
-      :redirect_uri => Facebook.config[:app_url] << "facebook/callback"
+      :redirect_uri => Facebook.config[:app_url] + "facebook/callback"
     )
     user = FbGraph::User.me(access_token).fetch
     authenticate Facebook.identify(user)
