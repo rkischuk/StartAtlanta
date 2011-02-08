@@ -1,11 +1,10 @@
-require 'authentication'
+require 'auth'
 
 class ApplicationController < ActionController::Base
-  after_filter :delayed_load_data
-  include Authentication
+  before_filter :capture_app_request
 
-  #Commented out, because Facebook messes this up
-  #protect_from_forgery
+  #after_filter :delayed_load_data
+  include Auth
 
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
 
@@ -19,6 +18,12 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def capture_app_request
+    unless params[:request_ids].nil?
+      session[:request_ids] = params[:request_ids]
+    end
+  end
 
   def delayed_load_data
     unless current_user.nil? || current_user.user.nil?

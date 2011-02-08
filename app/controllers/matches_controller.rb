@@ -3,10 +3,19 @@ class MatchesController < ApplicationController
   def index
     
   end
+  
+  def invite
+    @match = Match.find(params[:id])
+    #friends = current_user.profile.friends
+    #matchees = [m.person_a.fb_id, m.person_b.fb_id]
+    #@exclude_ids = friends.collect {|f| f.identifier}
+    #@exclude_ids = @exclude_ids.delete_if {|f| matchees.include?(f) }
+  end
 
   def show
     if (params['previous_match_id'])
-      match = Match.where(:id => params['previous_match_id']).first
+      match = current_user.user.matches.find(params['previous_match_id'])
+      #match = Match.where(:id => params['previous_match_id']).first
       if !match.nil? and match.respondable_by(current_user.user)
         match.status = Match::STATUS[params['previous_match_response'].to_sym]
         match.skipped_user_id = params['skipped_user_id']
@@ -40,7 +49,7 @@ class MatchesController < ApplicationController
   private
   
   def user_info_for(user)
-    return {:name => user[:name], :fb_id => user['fb_id'], :id => user['id']}
+    return {:name => user.name, :fb_id => user.fb_id, :id => user.id}
   end
 
 end

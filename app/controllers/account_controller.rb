@@ -4,13 +4,13 @@ class AccountController < ApplicationController
   def show
     logger.info "Beginning of show"
 
-    u = User.find_by_fb_id(current_user.identifier)
+    #u = User.find_by_fb_id(current_user.identifier)
+    u = nil
     if u.nil?
      u = User.fromFacebookUserObj(current_user, true)
      current_user.user = u
-     logger.info "Populating friends list"
-     u.populate_friends(current_user.profile.friends)
-     u.fetch_and_populate_friend_details(10, current_user.access_token)
+     #logger.info "Populating friends list"
+     #u.fetch_and_populate_friend_details(10, current_user.access_token)
     else
       current_user.user = u
     end

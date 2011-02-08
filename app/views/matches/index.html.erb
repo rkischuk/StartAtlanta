@@ -67,8 +67,8 @@
 		height: 45px;
 		width: 720px;
 		margin-top: -75px;
-		background: #D4D4D4;
-		color: #06ac51;
+		background: #203068;
+		color: #fae529;
 		font-size: 18px;
 		text-align: center;
 		padding-top: 20px;
@@ -204,25 +204,24 @@
 </head>
 
 <body class="home">
-<!-- <div id="fb_root"></div>
+<div id="fb_root"></div>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 <script>
 window.fbAsyncInit = function() {
   FB.init({
-	appId: "150263725027202", //"<%= Facebook.config[:client_id] %>",
+	appId: "<%= AppConfig.facebook_client_id %>",
 	cookie: true,
 	xfbml: true
   });
 }
-</script>-->
+</script>
 
 	<header id="hd1">
-		<!-- "hgroup" is used to make two headings into one, to prevent a new document node from forming -->
 		<hgroup>
-	        <div id="logo"><span id="logoText">your friends need you!</span> <img src="/images/logo.png" class="logo" alt="Connect Me" /></div>
+	    <div id="logo"><span id="logoText">your friends need you!</span> <img src="/images/logo.png" class="logo" alt="Connect Me" /></div>
 		</hgroup>
-	</header><!-- #hd1 -->
-
+	</header>
+  <div id="fb-root"></div>
 	<div id="matchBox">
 	    <div id="matchedPictures" style="float: left; width: 100px;"><img id="matchedLeft" src="" height="40" /> <img id="matchedRight" src="" height="40" /></div>
     	<div id="matchText">Congratulations! You've made a match! Would you like to invite your friends below to join ConnectMe? <a href="#" id="invite">Yep!</a></div>
@@ -291,7 +290,7 @@ var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
 <script>
 $('#invite').click(function(event) {
 	event.preventDefault();
-	FB.ui({method: 'apprequests', message: 'ConnectMe asked me who you\'d like to date. I found the perfect person.', title: 'ConnectMe is ready to connect you!', filters: [{name: 'Match', user_ids: [leftFbId, rightFbId]}]});
+	FB.ui({method: 'apprequests', message: 'ConnectMe asked me who you\'d like to date. I found the perfect person.', title: 'ConnectMe is ready to connect you!', filters: [{name: 'Match', user_ids: ['100001567445524', leftFbId, rightFbId]}]});
 });
 
 $(document).click(function(e) {
@@ -304,6 +303,9 @@ $('#skipLeft').click(function() {
 	$(this).attr('src', '/images/skip-left-hit.png');
 
 	id = $('#leftPerson').children().children('img:last').attr('id');
+	data = "previous_match_id="+matchId+"&previous_match_response=skip";
+	//data += (leftId == null) ? '' : "&skipped_user_id="+leftId
+
 	$.ajax({  
 
 		type: "POST",  
@@ -311,7 +313,7 @@ $('#skipLeft').click(function() {
 		url: domain,
 		dataType: "json",
 		success: function(data)
-		{  
+		{
 			matchId = data.match_id;
 			leftId = data.users[0].id;
 			leftFbId = data.users[0].fb_id;
@@ -467,12 +469,14 @@ $('#voteNo').click(function() {
 });
 
 function initialLoad() {
+  alert(domain);
 	$.ajax({
 		type: "POST",
 		url: domain,
 		dataType: 'json',
 		success: function(data)  
 		{
+		  alert(JSON.stringify(data));
 			matchId = data.match_id;
 			uCount = 0;
 			$.each(data.users, function() {

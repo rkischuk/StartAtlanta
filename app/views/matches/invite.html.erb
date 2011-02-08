@@ -1,0 +1,9 @@
+<fb:serverFbml style="width: 755px;">
+     <script type="text/fbml">
+        <fb:fbml>
+            <fb:request-form action="ACTION" method="POST" invite="true" type="ConnectMe" content="CONTENT">
+                <fb:request-form-submit uid="<%= @match.person_a.fb_id %>" label="Share with %n" />
+            </fb:request_form>
+         </fb:fbml>
+    </script>
+</fb:serverFbml>
