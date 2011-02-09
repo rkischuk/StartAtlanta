@@ -27,15 +27,13 @@ class FacebooksController < ApplicationController
       :redirect_uri => AppConfig.facebook_app_url + "facebook/callback"
     )
     fb_user = FbGraph::User.me(access_token).fetch
-    auth = authenticate Authentication.identify(fb_user)
-    user = User.fromFacebookUserObj(fb_user)
-    user.save
-    new_auth = Authentication.find(auth)
+    auth = Authentication.identify(fb_user)
 
-    new_auth.user = user
-    new_auth.save
+    authenticate auth.user
+    # saves state within this method
+    auth.user.fromFacebookUserObj(fb_user)
 
-    Resque.enqueue(LoadFriends, auth)
+    Resque.enqueue(LoadFriends, auth.id)
 
     redirect_to me_url
   end

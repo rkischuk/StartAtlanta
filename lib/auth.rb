@@ -10,28 +10,32 @@ module Auth
   module HelperMethods
 
     def current_user
-      @current_user ||= Authentication.find(session[:current_user])
-    rescue ActiveRecord::RecordNotFound
-      nil
+      user = User.find(session[:current_user])
+      unless user.nil?
+        @current_user ||= user
+      end
     end
 
     def authenticated?
       !current_user.blank?
     end
-
   end
 
   module ControllerMethods
 
     def require_authentication
-      Rails.logger.info "Requiring auth for user: " + session[:current_user].to_s
-      authenticate Authentication.find(session[:current_user])
+      authenticate User.find(session[:current_user].to_s)
+      #Rails.logger.info "Require auth - authorized"
     rescue Unauthorized => e
+      Rails.logger.info "Require auth - unauthorized"
       redirect_to new_facebook_url and return false
     end
 
     def authenticate(user)
+      Rails.logger.info "Testing authentication"
       raise Unauthorized unless user
+      Rails.logger.info "Authenticated"
+      #Rails.logger.info "Setting session user to " + user.id.to_s
       session[:current_user] = user.id
     end
 
@@ -39,7 +43,6 @@ module Auth
       current_user.destroy
       @current_user = session[:current_user] = nil
     end
-
   end
 
 end

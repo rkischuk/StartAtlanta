@@ -7,9 +7,9 @@ class User
   # Actual list of loaded friends
   key :friend_ids, Array, :typecast => 'ObjectId'
   many :friends, :class_name => 'User', :in => :friend_ids
-  #key :unprocessed_friends, Array
-  #many :friends, :class_name => 'User'
 
+  ensure_index 'friend_ids'
+  ensure_index([[:friend_ids, 1], [:relationship_status, 1], [:gender, 1]])
 
   #has_many :person_a_matches, :class_name => "Match", :foreign_key => 'person_a_id'
   #has_many :person_b_matches, :class_name => "Match", :foreign_key => 'person_b_id'
@@ -50,52 +50,35 @@ class User
   key :friend_list_fetched, Boolean
   key :has_matches, Boolean
 
-  # Not mapped so we defer persistence of most users
-  #def friends 
-  #  return User.find_all_by_fb_id(self.friend_ids)
-  #end
-
   def unfetched_friends
     return friend_ids - friends.collect {|f| f.fb_id}
   end
 
-  def self.fromFacebookUserObj(fbUserObj, is_full_fetch = false)
+  def fromFacebookUserObj(fbUserObj, is_full_fetch = false)
     #will not populate friends, groups, likes
     #check first to see if there is an existing row in the database for this user
-    user = User.find_by_fb_id(fbUserObj.identifier)
-    user = User.new if user.nil?
-
-    user.populate_from_fbUser(fbUserObj, is_full_fetch)
-    return user
+    populate_from_fbUser(fbUserObj, is_full_fetch)
   end
-
-  #def fetch_and_populate()
-  #    return false if fb_id.nil?
-
-  #    fbObj = FbGraph::User.fetch(fb_id, :access_token => current_user.access_token)
-  #    populate_from_fbUser(fbObj)
-  #end
-
-  #def fetch_and_populate_by_fb_id(new_fb_id)
-  #  return false if new_fb_id.nil?
-
-  #  self.fb_id = new_fb_id
-  #  fetch_and_populate
-  #end
 
   def populate_friend(friend_fb_id)
     u = User.find_by_fb_id(friend_fb_id)
-    u ||= User.new
-    token ||= authentications[0].access_token
+    token = authentications[0].access_token
 
-    Rails.logger.info "Grabbing user from Facebook " + friend_fb_id
-    fbData = FbGraph::User.fetch(friend_fb_id, :access_token => token)
-    Rails.logger.info "Done grabbing user from Facebook " + friend_fb_id
-    u.populate_from_fbUser(fbData, true)
 
-    unless friend_ids.include? u.id
-      self.push(:friend_ids => u.id)
+    if u.nil?
+      u = User.new
+      Rails.logger.info "Grabbing user from Facebook " + friend_fb_id
+      fbData = FbGraph::User.fetch(friend_fb_id, :access_token => token)
+      Rails.logger.info "Done grabbing user from Facebook " + friend_fb_id
+      u.populate_from_fbUser(fbData, true)
+    else
+      Rails.logger.info "Using already-loaded Facebook user " + friend_fb_id
     end
+
+    self.add_to_set(:friend_ids => u.id)
+    u.add_to_set(:friend_ids => self.id)
+
+    return u
   end
 
   def self.populate_from_facebook(fb_id, access_token)
@@ -261,13 +244,25 @@ class User
       # 2) relationship_status = "not married"
 
       if gender.nil?
-        f = friends.select{|f| !f.last_crawled.nil? && (f.relationship_status == 'Single' || f.relationship_status.nil?) }
-        return f[rand(f.size)]
-        #return friends.where("last_retrieved IS NOT NULL and (relationship_status = 'Single' or relationship_status IS NULL) and (gender = 'male' or gender = 'female')").order("RANDOM()").first
+        #f = friends.select{|f| !f.last_crawled.nil? && (f.relationship_status == 'Single' || f.relationship_status.nil?) }
+        #return f[rand(f.size)]
+        matches = User.fields([:id]).where({
+            :friend_ids => self.id, 
+            :relationship_status => ['Single', nil], 
+            :gender => ['male','female']}).all
+        match = User.find(matches[rand(matches.size)].id)
+        return match
+#        return friends.where("last_retrieved IS NOT NULL and (relationship_status = 'Single' or relationship_status IS NULL) and (gender = 'male' or gender = 'female')").order("RANDOM()").first
       else
-        f = friends.select{|f| !f.last_crawled.nil? && (f.relationship_status == 'Single' || f.relationship_status.nil?) && f.gender == gender }
-        return f[rand(f.size)]
+        matches = User.fields([:id]).where({
+            :friend_ids => self.id, 
+            :relationship_status => ['Single', nil], 
+            :gender => gender}).all
+        match = User.find(matches[rand(matches.size)].id)
+        #f = friends.select{|f| !f.last_crawled.nil? && (f.relationship_status == 'Single' || f.relationship_status.nil?) && f.gender == gender }
+        #return f[rand(f.size)]
         #return friends.where("last_retrieved IS NOT NULL and (relationship_status = 'Single' or relationship_status IS NULL) and (gender = ?)", gender).order("RANDOM()").first
+        return match
       end
 
     end
