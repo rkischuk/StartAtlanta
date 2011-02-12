@@ -11,7 +11,9 @@ StartAtlanta::Application.routes.draw do
   get 'me' => 'account#show'
 
   match "matches/invite"
+  match "matches/ready"
   match "matches/view"
+  match "matches/waiting"
   match "matches/show", :via => [:get, :post]
 
   resources :likes

@@ -47,7 +47,7 @@ class User
   key :education, String
   key :email, String
   key :last_crawled, Time
-  key :friend_list_fetched, Boolean
+  key :friends_list_fetched, Boolean, :default => false
   key :has_matches, Boolean
 
   def unfetched_friends

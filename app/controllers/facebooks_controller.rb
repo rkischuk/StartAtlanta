@@ -35,9 +35,12 @@ class FacebooksController < ApplicationController
 
     if auth.user.unmapped_friend_ids.empty?
       Resque.enqueue(LoadFriends, auth.id)
+      redirect_to matches_waiting_url
+    else
+      redirect_to AppConfig.facebook_app_url
     end
 
-    redirect_to AppConfig.facebook_app_url
+
   end
 
   def destroy

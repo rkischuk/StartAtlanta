@@ -42,6 +42,11 @@ class MatchesController < ApplicationController
     end
   end
   
+  def ready
+    current_user.reload
+    render :json => { "ready_to_match" => current_user.friends_list_fetched? }
+  end
+  
   def view
     
   end
