@@ -33,9 +33,11 @@ class FacebooksController < ApplicationController
     # saves state within this method
     auth.user.fromFacebookUserObj(fb_user)
 
-    Resque.enqueue(LoadFriends, auth.id)
+    if auth.user.unmapped_friend_ids.empty?
+      Resque.enqueue(LoadFriends, auth.id)
+    end
 
-    redirect_to me_url
+    redirect_to AppConfig.facebook_app_url
   end
 
   def destroy

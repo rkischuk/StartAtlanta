@@ -15,7 +15,7 @@ class MatchesController < ApplicationController
   def show
     if (params['previous_match_id'])
       match = current_user.matches.find(params['previous_match_id'])
-      #match = Match.where(:id => params['previous_match_id']).first
+
       if !match.nil? and match.respondable_by(current_user)
         match.status = Match::STATUS[params['previous_match_response'].to_sym]
         match.skipped_user_id = params['skipped_user_id']

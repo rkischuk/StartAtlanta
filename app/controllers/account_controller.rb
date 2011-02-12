@@ -14,7 +14,7 @@ class AccountController < ApplicationController
 
     redirect_to :controller => 'matches', :action => 'index'
   end
-  
+
   def next_match
     render :json => {:user => user}
   end

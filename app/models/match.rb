@@ -24,7 +24,7 @@ class Match
   }
 
   def respondable_by(user)
-    if status.nil? || status == STATUS[:notselected]
+    if status.nil? || status != STATUS[:notselected]
       if user == recommender
         return true
       end

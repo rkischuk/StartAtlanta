@@ -231,7 +231,7 @@ class User
     m.recommender_id = self.id
     m.person_a_id = person_a.id
     m.person_b_id = person_b.id
-    #Rails.logger.info m.to_json
+
     Rails.logger.info "Generating match between #{person_a.name} and #{person_b.name}"
     self.push(:matches => m.to_mongo)
     reload # otherwise the collection is dirty/incomplete
@@ -240,29 +240,18 @@ class User
 
   protected
     def get_matchable_person(gender = nil)
-      # > 18
-      # 2) relationship_status = "not married"
-
       if gender.nil?
-        #f = friends.select{|f| !f.last_crawled.nil? && (f.relationship_status == 'Single' || f.relationship_status.nil?) }
-        #return f[rand(f.size)]
         matches = User.fields([:id]).where({
             :friend_ids => self.id, 
             :relationship_status => ['Single', nil], 
             :gender => ['male','female']}).all
-        match = User.find(matches[rand(matches.size)].id)
-        return match
-#        return friends.where("last_retrieved IS NOT NULL and (relationship_status = 'Single' or relationship_status IS NULL) and (gender = 'male' or gender = 'female')").order("RANDOM()").first
+        return User.find(matches[rand(matches.size)].id)
       else
         matches = User.fields([:id]).where({
             :friend_ids => self.id, 
             :relationship_status => ['Single', nil], 
             :gender => gender}).all
-        match = User.find(matches[rand(matches.size)].id)
-        #f = friends.select{|f| !f.last_crawled.nil? && (f.relationship_status == 'Single' || f.relationship_status.nil?) && f.gender == gender }
-        #return f[rand(f.size)]
-        #return friends.where("last_retrieved IS NOT NULL and (relationship_status = 'Single' or relationship_status IS NULL) and (gender = ?)", gender).order("RANDOM()").first
-        return match
+        return User.find(matches[rand(matches.size)].id)
       end
 
     end
