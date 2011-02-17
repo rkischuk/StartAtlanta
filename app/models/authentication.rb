@@ -11,7 +11,7 @@ class Authentication
   end
 
   def self.auth
-    FbGraph::Auth.new AppConfig.facebook_client_id, AppConfig.facebook_client_secret
+    FbGraph::Auth.new AppConfig.facebook_app_id, AppConfig.facebook_client_secret
   end
 
   def self.identify(fb_user)

@@ -8,8 +8,6 @@ StartAtlanta::Application.routes.draw do
 
   root :to => 'account#show'
 
-  get 'me' => 'account#show'
-
   match "matches/invite"
   match "matches/ready"
   match "matches/view"

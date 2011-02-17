@@ -65,8 +65,9 @@ class User
     token = authentications[0].access_token
 
 
-    if u.nil?
-      u = User.new
+    u ||= User.new
+    
+    if u.last_crawled.nil?
       Rails.logger.info "Grabbing user from Facebook " + friend_fb_id
       fbData = FbGraph::User.fetch(friend_fb_id, :access_token => token)
       Rails.logger.info "Done grabbing user from Facebook " + friend_fb_id
@@ -236,6 +237,10 @@ class User
     self.push(:matches => m.to_mongo)
     reload # otherwise the collection is dirty/incomplete
     return m
+  end
+
+  def photo_url
+    return "https://graph.facebook.com/#{fb_id}/picture?type=large"
   end
 
   protected

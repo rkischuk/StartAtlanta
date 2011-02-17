@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
      :title   => e.class,
      :message => e.message
     }
+    logger.error(e.class + " - " + e.message )
     current_user.try(:destroy)
     redirect_to me_url
   end

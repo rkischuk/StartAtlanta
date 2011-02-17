@@ -1,6 +1,39 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css">  
+  </head>
+<body>
+	<header id="hd1">
+		<hgroup>
+	    <div id="logo"><span id="logoText">your friends need you!</span> <img src="/images/logo.png" class="logo" alt="Connect Me" /></div>
+		</hgroup>
+	</header>
+  <div id="fb-root"></div>
+  
+	<div id="matchPerson">
+	  <div id="matchDetails">
+	    <h2>You have been matched with:</h2>
+      <img src="<%= @match.matchee(current_user.id).photo_url %>" />
+      <div><%= @match.matchee(current_user.id).name %></div>
+    </div>
+    <div id="match_buttons" style="padding-top: 20px">
+      <a class="button blue" target="_top" href="<%= @match.matchee(current_user.id).link %>">View Profile</a>
+      <a class="button blue" href="/matches/">Match Your Friends</a>
+  </div>
 
-<div id="invite"> </div>
-Welcome to this page!
+
+
+	<footer id="f1">
+	<p><!-- copyright © 2011 --></p>
+	</footer><!-- #f1 -->
+</div>
+
+<!--- Cubics Ad Code START -->
+<div style="position: absolute; top: 550px">
+<iframe id="cubics" src='http://social.bidsystem.com/displayAd.aspx?pid=395357&appId=216636&plid=15965&adSize=728x90&channel=' width='728' height='90' frameborder='0' border='0' scrolling='no'></iframe>
+</div>
+<!--- Cubics Ad Code END -->
+
 
 <div id="fb-root"></div>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -32,3 +65,5 @@ Welcome to this page!
 
 
 </script>
+</body>
+</html>
