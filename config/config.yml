@@ -12,8 +12,8 @@ development:
     application_secret: b48d16e18d3baa7cdd5732eee6bae5d7
 
 production:
-    facebook_app_id: 150263725027202
-    facebook_app_url: http://apps.facebook.com/connxme/
-    facebook_client_id: aa5f6278677b856c359e75acca33bb05
-    facebook_client_secret: 04f39d1b7d7d8645fa3dfc40d21b30de
+    facebook_app_id: 182469515123614
+    facebook_app_url: http://apps.facebook.com/connectmeqa/
+    facebook_client_id: 3839ba2eb42a7405219bc2eb4bdba498
+    facebook_client_secret: 5d08b23094920fe3d1fafa0509c3471b
     facebook_perms: user_interests,offline_access,user_hometown,user_groups,friends_groups,user_events,user_education_history,user_birthday,user_activities,friends_activities,friends_birthday,user_likes,friends_likes,user_about_me,friends_about_me,friends_education_history,friends_birthday,friends_location,user_relationships,friends_relationships

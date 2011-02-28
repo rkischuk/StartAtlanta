@@ -15,12 +15,9 @@ test:
   pool: 5
   timeout: 5000
 
-
+# This shouldn't be used at all.  MongoDB should be running
 production: 
-  encoding: unicode
-  adapter: postgresql
-  username: xjrvfzkeqd
-  port: 5432
-  host: ec2-50-16-205-219.compute-1.amazonaws.com
-  database: xjrvfzkeqd
-  password: TJ3ZucAMEWFX-vO6GDR0
+  adapter: sqlite3
+  database: db/prod.sqlite3
+  pool: 5
+  timeout: 5000
