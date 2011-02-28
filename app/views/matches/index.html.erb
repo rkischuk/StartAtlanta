@@ -51,7 +51,7 @@ window.fbAsyncInit = function() {
   <div id="fb-root"></div>
 	<div id="matchBox">
 	    <div id="matchedPictures" style="float: left; width: 100px;"><img id="matchedLeft" src="" height="40" /> <img id="matchedRight" src="" height="40" /></div>
-    	<div id="matchText">Congratulations! You've made a match! Be sure to tell your friends about ConnectMe. <a href="#" id="invite">Yep!</a></div>
+    	<div id="matchText">You made a great match! <a href="#" id="invite">Now invite your friends to see the great match you've found for them!</a></div>
     </div>
     
     <div id="leftPerson">
@@ -125,7 +125,7 @@ $('#invite').click(function(event) {
 	event.preventDefault();
 	FB.ui({
 	  method: 'apprequests',
-	  message: 'ConnectMe asked me who you\'d like to date. I found the perfect person.', title: 'ConnectMe is ready to connect you!', 
+	  message: 'I found an awesome person you should meet using ConnectMe! See who it is now!', title: 'A new friend is waiting!!', 
 	  filters: [{name: 'Match', user_ids: [oldLeftFbId, oldRightFbId]}],
 	  data: "match_id="+oldMatchId
 	});
