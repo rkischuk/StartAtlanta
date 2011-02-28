@@ -17,6 +17,7 @@
 	<link rel="shortcut icon" href="/favicon.ico">
 	<!-- apple touch icon 57x57 -->
 	<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css">
 
 	<!-- Main style sheet. Change version number in query string to force styles refresh -->
 	<!-- Link element no longer needs type attribute -->
@@ -27,183 +28,6 @@
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	<style>
-    <!--
-    
-    /********************
-    ** Layout ***********
-    ********************/
-    body {
-        padding: 0;
-        margin: 0;
-        width: 720px;
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 22px;
-    }
-    
-    #hd1 {
-        padding-top:20px;
-        width: 648px;
-    }
-    
-    #logo {
-        margin: 0 auto;
-        width: 532px;
-        height: 146px;
-    }
-    
-    #logoText {
-        z-index: 999999;
-        position: relative;
-        left: 380px;
-        top: 130px;
-        color: #64bbe9;	
-    }
-	
-	#matchBox {
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 45px;
-		width: 720px;
-		margin-top: -75px;
-		background: #203068;
-		color: #fae529;
-		font-size: 18px;
-		text-align: center;
-		padding-top: 20px;
-		padding: 20px 10px 10px 10px;
-	}
-    /********************
-    ** End of Layout ****
-    ********************/
-    
-    /********************
-    ** Profile **********
-    ********************/
-    #pictureBox {
-        position: absolute;
-        top: 260px;
-        left: 0;
-        height: 220px;
-        width: 720px;
-        overflow: hidden;
-        background: url('/images/middle.png') no-repeat;
-        z-index: 9999995;
-    }
-    
-    #nameBox {
-        position: absolute;
-        top: 525px;
-    }
-    
-    .personImage {
-        height: 218px;
-        margin: 0 auto;
-        text-align: center;
-    }
-    
-    #leftPerson {
-        position: absolute;
-        left: 65px;
-        top: 261px;
-        max-width: 180px;
-        height: 218px;
-        z-index: 10000;
-        overflow: hidden;
-    }
-    
-    #rightPerson {
-        position: absolute;
-        left: 460px;
-        top: 261px;
-        max-width: 180px;
-        height: 218px;
-        z-index: 100001;
-        overflow: hidden;
-    }
-    
-    #rpContainer {
-        height: 436px;
-    }
-    
-    .pContainer {
-        width: 180px;
-        margin: 0 auto;
-        text-align: center;
-    }
-    /********************
-    ** End of Profile ***
-    ********************/
-    
-    /********************
-    ** Buttons **********
-    ********************/
-    #buttonBox {
-        position: absolute;
-        top: 440px;
-        left: 270px;
-        width: 180px;
-        z-index: 9999998;
-        cursor: pointer;
-    }
-    
-    #skipLeft {
-        position: absolute;
-        left: 20px;
-        top: 280px;
-        width:30px;
-        height: 97px;
-        z-index: 9999996;
-        cursor: pointer;
-    }
-    
-    #skipRight {
-        position: absolute;
-        left: 660px;
-        top: 360px;
-        width: 30px;
-        height: 97px;
-        z-index: 9999997;
-        cursor: pointer;
-    }
-    
-    #leftName {
-        position: relative;
-        left: 65px;
-        top: -40px;
-        width: 180px;
-        text-align: center;
-        color: #06ac51;
-        z-index: 30;
-    }
-    
-    #rightName {
-        position: relative;
-        left: 460px;
-        top: -66px;
-        width: 180px;
-        text-align: center;
-        color: #06ac51;
-        z-index: 35;
-    }
-    /********************
-    ** End of Buttons ***
-    ********************/
-    
-    /********************
-    ** Footer ***********
-    ********************/
-    #f1 {
-        position: relative;
-        top: 100px;
-    }
-    /********************
-    ** End of Footer ****
-    ********************/
-    
-    -->
-    </style>
 </head>
 
 <body class="home">
@@ -227,7 +51,7 @@ window.fbAsyncInit = function() {
   <div id="fb-root"></div>
 	<div id="matchBox">
 	    <div id="matchedPictures" style="float: left; width: 100px;"><img id="matchedLeft" src="" height="40" /> <img id="matchedRight" src="" height="40" /></div>
-    	<div id="matchText">Congratulations! You've made a match! Be sure to tell your friends about ConnectMe. <!--<a href="#" id="invite">Yep!</a>--></div>
+    	<div id="matchText">You made a great match! <a href="#" id="invite">Now invite your friends to see the great match you've found for them!</a></div>
     </div>
     
     <div id="leftPerson">
@@ -299,7 +123,12 @@ var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
 <script>
 $('#invite').click(function(event) {
 	event.preventDefault();
-	FB.ui({method: 'apprequests', message: 'ConnectMe asked me who you\'d like to date. I found the perfect person.', title: 'ConnectMe is ready to connect you!', filters: [{name: 'Match', user_ids: ['100001567445524', leftFbId, rightFbId]}]});
+	FB.ui({
+	  method: 'apprequests',
+	  message: 'I found an awesome person you should meet using ConnectMe! See who it is now!', title: 'A new friend is waiting!!', 
+	  filters: [{name: 'Match', user_ids: [oldLeftFbId, oldRightFbId]}],
+	  data: "match_id="+oldMatchId
+	});
 });
 
 $(document).click(function(e) {
@@ -351,7 +180,7 @@ $('#skipRight').click(function() {
 		dataType: "json",
 		success: function(data)
 		{  
-			matchId = data.matchId;
+			matchId = data.match_id;
 			rightId = data.users[0].id;
 			rightFbId = data.users[0].fb_id;
 			rightName = data.users[0].name;
@@ -398,6 +227,7 @@ $('#voteYes').click(function() {
 		dataType: 'json',
 		success: function(data)  
 		{
+		  oldMatchId = matchId;
 			matchId = data.match_id;
 			uCount = 0;
 			$.each(data.users, function() {
@@ -544,6 +374,7 @@ $(document).ready(function() {
 	rightName = '';
 	matchId = '';
 	oldLeftFbId = '';
+	oldMatchId = '';
 	oldRightFbId = '';
 	domain = 'http://<%= request.env["HTTP_HOST"] %>/matches/show';
   initialLoad();

@@ -1,15 +1,9 @@
 class MatchesController < ApplicationController
 
+  before_filter :require_friends, :except => [:waiting, :view]
+
   def index
     
-  end
-  
-  def invite
-    @match = Match.find(params[:id])
-    #friends = current_user.profile.friends
-    #matchees = [m.person_a.fb_id, m.person_b.fb_id]
-    #@exclude_ids = friends.collect {|f| f.identifier}
-    #@exclude_ids = @exclude_ids.delete_if {|f| matchees.include?(f) }
   end
 
   def show
@@ -41,14 +35,27 @@ class MatchesController < ApplicationController
       render :json => {"error" => "User does not have an active session"}
     end
   end
-  
+
   def ready
     current_user.reload
     render :json => { "ready_to_match" => current_user.friends_list_fetched? }
   end
-  
+
+  def require_friends
+    if current_user.unmapped_friend_ids.empty? # New user
+      redirect_to matches_waiting_url
+    end
+  end
+
   def view
-    
+
+    request_id = params[:request_ids]
+
+    @request = FbGraph::Request.fetch(request_id, :access_token => current_user.authentications[0].access_token)
+
+    params = @request.data.split '='
+    @request.destroy
+    @match = Match.find(params[1])
   end
   
   private

@@ -1,33 +1,18 @@
 class User
   include MongoMapper::Document
+
   many :authentications
   many :matches, :class_name => 'Match'
-  # Basic cache of friend ids (by fb_id) to be loaded later
-  key :unmapped_friend_ids, Array
-  # Actual list of loaded friends
-  key :friend_ids, Array, :typecast => 'ObjectId'
+  key :unmapped_friend_ids, Array   # Basic cache of friend ids (by fb_id) to be loaded later
+  key :friend_ids, Array, :typecast => 'ObjectId' # Actual list of loaded friends
   many :friends, :class_name => 'User', :in => :friend_ids
 
+  key :like_ids, Array, :typecast => 'ObjectId'
+  many :likes, :class_name => 'Like', :in => :like_ids
+
+  ensure_index 'fb_id'
   ensure_index 'friend_ids'
   ensure_index([[:friend_ids, 1], [:relationship_status, 1], [:gender, 1]])
-
-  #has_many :person_a_matches, :class_name => "Match", :foreign_key => 'person_a_id'
-  #has_many :person_b_matches, :class_name => "Match", :foreign_key => 'person_b_id'
-  #has_many :recommendations, :class_name => "Match", :foreign_key => 'recommender_id'
-  #has_many :skipped, :class_name => "Match", :foreign_key => 'skipped_user_id'
-  #has_and_belongs_to_many :likes, :join_table => "users_likes"
-
-  # from: http://railscasts.com/episodes/163-self-referential-association
-
-  #has_many :friendships
-  #has_many :friends, :through => :friendships, :source => :friend
-  #has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
-  #has_many :inverse_friends, :through => :inverse_friendships, :source => :user
-  #has_many :newmatches, :through => :friendships, :source => :friend, :conditions => "gender = 'female'"
-
-  #has_one :location
-  #has_many :interestedins
-  #has_many :meetingsfors
 
   key :fb_id, String
   key :name, String
@@ -54,6 +39,10 @@ class User
     return friend_ids - friends.collect {|f| f.fb_id}
   end
 
+  def self.create_from_hash!(hash)
+    create(:name => hash['user_info']['name'])
+  end
+
   def fromFacebookUserObj(fbUserObj, is_full_fetch = false)
     #will not populate friends, groups, likes
     #check first to see if there is an existing row in the database for this user
@@ -64,16 +53,22 @@ class User
     u = User.find_by_fb_id(friend_fb_id)
     token = authentications[0].access_token
 
-
-    if u.nil?
-      u = User.new
+    u ||= User.new
+    
+    #if u.last_crawled.nil?
+      # Just load them every time, no biggie
       Rails.logger.info "Grabbing user from Facebook " + friend_fb_id
       fbData = FbGraph::User.fetch(friend_fb_id, :access_token => token)
       Rails.logger.info "Done grabbing user from Facebook " + friend_fb_id
       u.populate_from_fbUser(fbData, true)
-    else
-      Rails.logger.info "Using already-loaded Facebook user " + friend_fb_id
-    end
+      
+      populate_groups(fbData.groups)
+      populate_likes(fbData.likes)
+      populate_likes(fbData.movies)
+      populate_likes(fbData.music)
+    #else
+    #  Rails.logger.info "Using already-loaded Facebook user " + friend_fb_id
+    #end
 
     self.add_to_set(:friend_ids => u.id)
     u.add_to_set(:friend_ids => self.id)
@@ -150,7 +145,6 @@ class User
   def fetch_and_populate_friend_details(num = nil, token = nil)
     
     friends_list = self.unmapped_friend_ids
-    #friends.select{|x| x.last_crawled.nil?}
     Rails.logger.info("Populating full friends list")
     Rails.logger.info(friends_list)
     unless num.nil?
@@ -161,8 +155,6 @@ class User
 
     friends_list.each do |f|
       Resque.enqueue(LoadFriend, self.id, f)
-      #friendFb = FbGraph::User.fetch(f.fb_id, :access_token => token)
-      #u = User.fromFacebookUserObj(friendFb, true)
     end
   end
 
@@ -171,6 +163,7 @@ class User
   end
 
   def populate_groups(group_list)
+    groups = []
     group_list.each do |group|
       next if group.name.nil?
       
@@ -184,6 +177,7 @@ class User
         l.save
       end
       
+      #groups << l
       self.likes << l
     end
     self.save
@@ -194,7 +188,7 @@ class User
       next if like.name.nil?
       
       Rails.logger.info "Logging " << like.name
-      puts like.name
+      #puts like.name
       l = Like.find_by_fb_id(like.identifier)
       if l.nil?
         l = Like.new
@@ -236,6 +230,10 @@ class User
     self.push(:matches => m.to_mongo)
     reload # otherwise the collection is dirty/incomplete
     return m
+  end
+
+  def photo_url
+    return "https://graph.facebook.com/#{fb_id}/picture?type=large"
   end
 
   protected

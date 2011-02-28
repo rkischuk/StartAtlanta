@@ -28,14 +28,18 @@ module Auth
       #Rails.logger.info "Require auth - authorized"
     rescue Unauthorized => e
       Rails.logger.info "Require auth - unauthorized"
-      redirect_to new_facebook_url and return false
+      next_url = new_facebook_url
+      if params["request_ids"].nil?
+          session[:request_ids] = nil
+      else
+          session[:request_ids] = params[:request_ids]
+      end
+      #next_url += ("?request_ids=" + params["request_ids"]) unless params["request_ids"].nil?
+      redirect_to next_url and return false
     end
 
     def authenticate(user)
-      Rails.logger.info "Testing authentication"
       raise Unauthorized unless user
-      Rails.logger.info "Authenticated"
-      #Rails.logger.info "Setting session user to " + user.id.to_s
       session[:current_user] = user.id
     end
 

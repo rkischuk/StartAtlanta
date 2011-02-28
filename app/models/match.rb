@@ -33,5 +33,25 @@ class Match
     return false
   end
 
+  # Given an id of 1 person in the match, returns the other person
+  def matchee identifier
+    identifier = BSON::ObjectId(identifier) unless identifier.is_a?(BSON::ObjectId)
+    if (person_a_id == identifier) || (person_b_id == identifier)
+      return (person_a_id == identifier) ? person_b : person_a
+    else
+      return nil
+    end
+  end
+
+  def self.find identifier
+    identifier = BSON::ObjectId(identifier) unless identifier.is_a?(BSON::ObjectId)
+    u = User.first('matches._id' => identifier)
+    if u.nil?
+      return nil
+    else
+      return u.matches.find(identifier)
+    end
+  end
+
 end
 

@@ -13,8 +13,9 @@ class ApplicationController < ActionController::Base
      :title   => e.class,
      :message => e.message
     }
+    logger.error(e.class.to_s + " - " + e.message )
     current_user.try(:destroy)
-    redirect_to me_url
+    redirect_to matches_show_url
   end
 
   private

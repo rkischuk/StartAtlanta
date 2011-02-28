@@ -1,18 +1,15 @@
 class AccountController < ApplicationController
-  before_filter :require_authentication#, :except => :index
+  before_filter :require_authentication
 
   def show
-    logger.info "Beginning of show"
-
-    #u.populate_likes(current_user.profile.likes)
-    #u.populate_groups(current_user.profile.groups)
-
     @user = current_user.authentications[0]
     @profile = @user.profile
 
-    #current_user.save
-
-    redirect_to :controller => 'matches', :action => 'index'
+    if params[:request_ids].nil?
+      redirect_to :controller => 'matches', :action => 'index'
+    else
+      redirect_to matches_view_url + '?request_ids=' + params[:request_ids]
+    end
   end
 
   def next_match

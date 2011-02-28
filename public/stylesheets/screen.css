@@ -1,0 +1,245 @@
+  /********************
+  ** Layout ***********
+  ********************/
+  body {
+      padding: 0;
+      margin: 0;
+      width: 720px;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 22px;
+  }
+  
+  #hd1 {
+      padding-top:20px;
+      width: 648px;
+  }
+  
+  #logo {
+      margin: 0 auto;
+      width: 532px;
+      height: 146px;
+  }
+  
+  #logoText {
+      z-index: 1199;
+      position: relative;
+      left: 380px;
+      top: 130px;
+      color: #64bbe9;	
+  }
+
+#matchBox {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 45px;
+	width: 720px;
+	margin-top: -75px;
+	background: #203068;
+	color: #fae529;
+	font-size: 18px;
+	text-align: center;
+	padding-top: 20px;
+	padding: 20px 10px 10px 10px;
+}
+
+#matchBox a:link {
+  	color: #fae529;
+}
+
+#matchBox a:visited {
+  	color: #fae529;
+}
+
+#matchBox a:active {
+  	color: #fae529;
+}
+
+#matchBox a:hover {
+  	color: #fae529;
+}
+
+  /********************
+  ** End of Layout ****
+  ********************/
+
+  /********************
+  ** Button magic *****
+  ** http://www.webdesignerwall.com/tutorials/css3-gradient-buttons/ *****
+  ********************/
+
+  .button {
+  	display: inline-block;
+  	outline: none;
+  	cursor: pointer;
+  	text-align: center;
+  	text-decoration: none;
+  	font: 14px/100% Arial, Helvetica, sans-serif;
+  	padding: .5em 2em .55em;
+  	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+  	-webkit-border-radius: .5em;
+  	-moz-border-radius: .5em;
+  	border-radius: .5em;
+  	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  }
+  .button:hover {
+  	text-decoration: none;
+  }
+  .button:active {
+  	position: relative;
+  	top: 1px;
+  }
+
+  .blue {
+  	color: #d9eef7;
+  	border: solid 1px #0076a3;
+  	background: #0095cd;
+  	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+  	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+  	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+  }
+  .blue:hover {
+  	background: #007ead;
+  	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+  	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+  	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+  }
+  .blue:active {
+  	color: #80bed6;
+  	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+  	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+  	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+  }
+
+  /********************
+  ** Profile **********
+  ********************/
+  #pictureBox {
+      position: absolute;
+      top: 260px;
+      left: 0;
+      height: 220px;
+      width: 720px;
+      overflow: hidden;
+      background: url('/images/middle.png') no-repeat;
+      z-index: 1105;
+  }
+  
+  #nameBox {
+      position: absolute;
+      top: 525px;
+  }
+  
+  .personImage {
+      height: 218px;
+      margin: 0 auto;
+      text-align: center;
+  }
+  
+  #matchPerson {
+    width: 720px;
+    position: absolute;
+    top: 201px;
+    text-align: center;
+  }
+  
+  #leftPerson {
+      position: absolute;
+      left: 65px;
+      top: 261px;
+      max-width: 180px;
+      height: 218px;
+      z-index: 100;
+      overflow: hidden;
+  }
+  
+  #rightPerson {
+      position: absolute;
+      left: 460px;
+      top: 261px;
+      max-width: 180px;
+      height: 218px;
+      z-index: 1001;
+      overflow: hidden;
+  }
+  
+  #rpContainer {
+      height: 436px;
+  }
+  
+  .pContainer {
+      width: 180px;
+      margin: 0 auto;
+      text-align: center;
+  }
+  /********************
+  ** End of Profile ***
+  ********************/
+  
+  /********************
+  ** Buttons **********
+  ********************/
+  #buttonBox {
+      position: absolute;
+      top: 440px;
+      left: 270px;
+      width: 180px;
+      z-index: 1198;
+      cursor: pointer;
+  }
+  
+  #skipLeft {
+      position: absolute;
+      left: 20px;
+      top: 280px;
+      width:30px;
+      height: 97px;
+      z-index: 1196;
+      cursor: pointer;
+  }
+  
+  #skipRight {
+      position: absolute;
+      left: 660px;
+      top: 360px;
+      width: 30px;
+      height: 97px;
+      z-index: 1197;
+      cursor: pointer;
+  }
+  
+  #leftName {
+      position: relative;
+      left: 65px;
+      top: -40px;
+      width: 180px;
+      text-align: center;
+      color: #06ac51;
+      z-index: 30;
+  }
+  
+  #rightName {
+      position: relative;
+      left: 460px;
+      top: -66px;
+      width: 180px;
+      text-align: center;
+      color: #06ac51;
+      z-index: 35;
+  }
+  /********************
+  ** End of Buttons ***
+  ********************/
+  
+  /********************
+  ** Footer ***********
+  ********************/
+  #f1 {
+      position: relative;
+      top: 100px;
+  }
+  /********************
+  ** End of Footer ****
+  ********************/

@@ -1,34 +1,38 @@
-
-<div id="invite"> </div>
-Welcome to this page!
-
-<div id="fb-root"></div>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-
-<!-- Remote jQuery with local fallback; taken from HTML5 Boilerplate http://html5boilerplate.com -->
-<!-- jQuery version might not be the latest; check jquery.com -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-<script>!window.jQuery && document.write(unescape('%3Cscript src="js/jquery-1.4.4.min.js"%3E%3C/script%3E'))</script>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-
-<script>
-  FB.init({
-    appId  : 122349161170258,
-    status : true, // check login status
-    cookie : true, // enable cookies to allow the server to access the session
-    xfbml  : true  // parse XFBML
-  });
-
-  $.ajax({
-    type:"GET",
-    url: "/matches/invite?id=17",
-    datatype: 'text',
-    success: function(html) {
-      var ele = $('#invite')[0];
-      ele.innerHTML = html;
-      FB.XFBML.parse(ele);
-    }
-  });
+<html>
+  <head>
+    <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css">  
+  </head>
+<body>
+	<header id="hd1">
+		<hgroup>
+	    <div id="logo"><span id="logoText">your friends need you!</span> <img src="/images/logo.png" class="logo" alt="Connect Me" /></div>
+		</hgroup>
+	</header>
+  <div id="fb-root"></div>
+  
+	<div id="matchPerson">
+	  <div id="matchDetails">
+	    <h2>You have been matched with:</h2>
+      <img src="<%= @match.matchee(current_user.id).photo_url %>" style="height: 170px"/>
+      <div><%= @match.matchee(current_user.id).name %></div>
+    </div>
+    <div id="match_buttons" style="padding-top: 20px">
+      <a class="button blue" target="_blank" href="<%= @match.matchee(current_user.id).link %>">View Their Profile</a>
+      <a class="button blue" href="/matches/">Match Your Friends</a>
+  </div>
 
 
-</script>
+
+	<footer id="f1">
+	<p><!-- copyright © 2011 --></p>
+	</footer><!-- #f1 -->
+</div>
+
+<!--- Cubics Ad Code START -->
+<div style="position: absolute; top: 550px">
+<iframe id="cubics" src='http://social.bidsystem.com/displayAd.aspx?pid=395357&appId=216636&plid=15965&adSize=728x90&channel=' width='728' height='90' frameborder='0' border='0' scrolling='no'></iframe>
+</div>
+<!--- Cubics Ad Code END -->
+
+</body>
+</html>
