@@ -5,8 +5,6 @@ class AccountController < ApplicationController
     @user = current_user.authentications[0]
     @profile = @user.profile
 
-    logger.info "Foo"
-    logger.info params[:request_ids]
     if params[:request_ids].nil?
       redirect_to :controller => 'matches', :action => 'index'
     else

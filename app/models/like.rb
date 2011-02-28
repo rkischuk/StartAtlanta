@@ -1,3 +1,11 @@
-class Like < ActiveRecord::Base
-  has_and_belongs_to_many :users, :join_table => "users_likes"
+class Like
+  include MongoMapper::Document
+
+  ensure_index 'fb_id'
+
+  key :fb_id, String
+  key :name, String
+  key :category, String
+  key :link, String
+
 end

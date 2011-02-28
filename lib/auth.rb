@@ -29,7 +29,12 @@ module Auth
     rescue Unauthorized => e
       Rails.logger.info "Require auth - unauthorized"
       next_url = new_facebook_url
-      next_url += ("?request_ids=" + params["request_ids"]) unless params["request_ids"].nil?
+      if params["request_ids"].nil?
+          session[:request_ids] = nil
+      else
+          session[:request_ids] = params[:request_ids]
+      end
+      #next_url += ("?request_ids=" + params["request_ids"]) unless params["request_ids"].nil?
       redirect_to next_url and return false
     end
 

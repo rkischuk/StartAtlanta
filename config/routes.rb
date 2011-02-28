@@ -14,6 +14,8 @@ StartAtlanta::Application.routes.draw do
   match "matches/waiting"
   match "matches/show", :via => [:get, :post]
 
+  match '/auth/:provider/callback', :to => 'sessions#create'
+
   resources :likes
   resources :matches
   resources :users

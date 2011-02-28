@@ -11,7 +11,7 @@ class FacebooksController < ApplicationController
   # handle Normal OAuth flow: start
   def new
     next_url = AppConfig.facebook_app_url + "facebook/callback"
-    next_url += ("?request_ids=" + params[:request_ids]) unless params[:request_ids].nil?
+    #next_url += ("?request_ids=" + params[:request_ids]) unless params[:request_ids].nil?
     @auth_url = Authentication.auth.client.web_server.authorize_url(
       :redirect_uri => next_url, :scope => AppConfig.facebook_perms
     )
@@ -19,24 +19,29 @@ class FacebooksController < ApplicationController
 
   def create # /facebook/callback
     next_url = AppConfig.facebook_app_url + "facebook/callback"
-    next_url += ("?request_ids=" + params[:request_ids]) unless params[:request_ids].nil?
+    #next_url += ("?request_ids=" + session[:request_ids]) unless session[:request_ids].nil?
     access_token = Authentication.auth.client.web_server.get_access_token(
       params[:code],
       :redirect_uri => next_url #AppConfig.facebook_app_url + "facebook/callback"
     )
-    fb_user = FbGraph::User.me(access_token).fetch
+    logger.info("Access token is " + access_token.to_json)
+    fb_user = FbGraph::User.me(access_token.token).fetch
     auth = Authentication.identify(fb_user)
     authenticate auth.user
     auth.user.fromFacebookUserObj(fb_user) # saves state within this method
+
+    #
+    # TODO: Figure out why the user is nil when coming in to view matches
+    #
 
     if auth.user.unmapped_friend_ids.empty? # New user
       Resque.enqueue(LoadFriends, auth.id)
     end
     
-    if params[:request_ids].nil? #normal user
+    if session[:request_ids].nil? #normal user
       redirect_to AppConfig.facebook_app_url
     else # incoming match request
-      redirect_to matches_view_url + "?request_ids=" + params[:request_ids]
+      redirect_to matches_view_url + "?request_ids=" + session[:request_ids]
     end
   end
 

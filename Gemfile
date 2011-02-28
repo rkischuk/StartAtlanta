@@ -1,11 +1,10 @@
 source "http://rubygems.org"
 gem 'bson_ext'
-gem 'heroku'
 gem 'httparty'
 gem 'fb_graph'
 gem 'highline'
 gem 'net-ssh'
 gem 'mongo_mapper'
+gem 'omniauth'
 gem 'rails', '3.0.3'
 gem 'resque'
-gem 'sqlite3-ruby', :require => 'sqlite3'

@@ -35,7 +35,7 @@ class MatchesController < ApplicationController
       render :json => {"error" => "User does not have an active session"}
     end
   end
-  
+
   def ready
     current_user.reload
     render :json => { "ready_to_match" => current_user.friends_list_fetched? }
@@ -48,12 +48,13 @@ class MatchesController < ApplicationController
   end
 
   def view
+
     request_id = params[:request_ids]
-    logger.info "Request id is " << request_id
-    @request = FbGraph::Request.fetch(request_id, :access_token => '122349161170258|f06da3034ff698607655cfd1-100001567445524|B4XoFI-eVZvKsVkLYR_UDCKYlO8')
-    logger.info @request.data
+
+    @request = FbGraph::Request.fetch(request_id, :access_token => current_user.authentications[0].access_token)
+
     params = @request.data.split '='
-    logger.info "Match id is " << params[1]
+    @request.destroy
     @match = Match.find(params[1])
   end
   
